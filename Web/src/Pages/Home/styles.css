@@ -1,0 +1,9 @@
+.left-panel {
+    flex: 1;
+    min-width: 400px;
+  }
+  
+  .right-panel {
+    flex: 1;
+    min-width: 400px;
+  }

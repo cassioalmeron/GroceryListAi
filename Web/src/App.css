@@ -1,0 +1,51 @@
+#root {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+.main-container {
+  display: flex;
+  gap: 2rem;
+  height: calc(100vh - 2rem);
+  max-height: 800px;
+}
+
+
+
+/* Responsive design */
+@media (max-width: 1024px) {
+  .main-container {
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+  }
+  
+  .left-panel,
+  .right-panel {
+    min-width: auto;
+    width: 100%;
+  }
+  
+  .right-panel {
+    margin-top: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  #root {
+    padding: 0.5rem;
+  }
+  
+  .main-container {
+    gap: 1rem;
+  }
+}
