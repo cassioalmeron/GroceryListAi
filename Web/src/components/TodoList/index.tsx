@@ -34,7 +34,7 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
       setError(null)
       const data = await getGroceryList()
       // Map API response to our Todo interface
-      const mappedTodos = data.map((item: { id: string; description: string; completed?: boolean }) => ({
+      const mappedTodos = data.map((item: { id: string; description: string; checked?: boolean }) => ({
         id: item.id,
         description: item.description,
         checked: item.checked || false
