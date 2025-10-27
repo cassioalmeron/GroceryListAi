@@ -16,19 +16,84 @@ A FastAPI-based grocery list application with AI chat integration supporting bot
 
 ## Setup
 
-### 1. Install Dependencies
+### 1. Install uv (Recommended Package Manager)
+
+Install `uv` for faster and more reliable package management:
 
 ```bash
-pip install fastapi uvicorn python-dotenv openai ollama sqlalchemy
+# On Windows (PowerShell)
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# On macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Or using pip
+pip install uv
 ```
 
-Or if using `uv`:
+### 2. Create Virtual Environment
 
+Create and activate a virtual environment:
+
+#### Using uv (recommended):
 ```bash
+# Create virtual environment with uv
+uv venv
+
+# Activate virtual environment
+# On Windows:
+.venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
+```
+
+#### Using traditional Python venv:
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+
+#### Using uv (recommended):
+```bash
+# Install all dependencies with uv (fastest and most reliable)
 uv sync
 ```
 
-### 2. Configure Environment Variables
+#### Using pip (alternative):
+```bash
+# Install all dependencies at once
+pip install fastapi uvicorn python-dotenv openai ollama sqlalchemy
+
+# Or install individually if you encounter conflicts
+pip install fastapi uvicorn python-dotenv sqlalchemy
+pip install openai ollama
+```
+
+#### Troubleshooting Installation Issues
+
+If you encounter dependency conflicts (like `jiter` version issues), try:
+
+```bash
+# Upgrade pip first
+pip install --upgrade pip
+
+# Install with no dependencies first, then install them separately
+pip install openai --no-deps
+pip install httpx pydantic anyio sniffio typing-extensions
+
+# Or use a specific version that's compatible
+pip install "openai>=1.0.0,<2.0.0"
+```
+
+### 4. Configure Environment Variables
 
 Copy the sample environment file:
 
@@ -53,7 +118,7 @@ OPENAI_API_KEY=your_actual_api_key_here
 DATABASE_URL=sqlite:///./grocery_list.db
 ```
 
-### 3. Run the Server
+### 5. Run the Server
 
 The database tables will be created automatically on first run.
 
@@ -107,13 +172,17 @@ curl -X POST http://localhost:8000/chat \
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.10+ (recommended: Python 3.11 or 3.12 for better compatibility)
 - FastAPI
 - Uvicorn
 - python-dotenv
 - SQLAlchemy
 - openai (for ChatGPT support)
 - ollama (for Ollama support)
+
+### Python Version Compatibility
+
+If you're using Python 3.8 or 3.9, you may encounter dependency conflicts. Consider upgrading to Python 3.11+ for better package compatibility.
 
 ## Environment Variables
 
