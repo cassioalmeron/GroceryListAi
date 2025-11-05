@@ -178,8 +178,8 @@ async def chat(request: Request, db: Session = Depends(get_db)):
             print(f"Error executing commands: {e}")
 
     return StreamingResponse(
-        generate(), 
-        media_type="text/event-stream",
+        generate(),
+        media_type="text/plain",
         headers={
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",

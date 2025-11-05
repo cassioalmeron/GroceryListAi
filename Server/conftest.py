@@ -10,6 +10,9 @@ from api import app
 from Models import Base, get_db
 
 
+# Configure pytest-asyncio
+pytest_plugins = ('pytest_asyncio',)
+
 # Use in-memory SQLite for testing
 TEST_SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
 

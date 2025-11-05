@@ -3,7 +3,7 @@ name = "grocery-list"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 dependencies = [
     "dotenv>=0.9.9",
     "fastapi>=0.118.0",
@@ -17,5 +17,9 @@ dependencies = [
 test = [
     "pytest>=7.4.0",
     "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
     "httpx>=0.24.0",
 ]
+
+[tool.setuptools]
+packages = ["Models"]
