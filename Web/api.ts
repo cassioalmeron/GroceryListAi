@@ -29,44 +29,61 @@ export const markItemAsChecked = async (id: number, checked: boolean) => {
 }
 
 export const chat = async(message: string, onChunk?: (chunk: string) => void) => {
-    const response = await fetch('http://localhost:8000/chat', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message })
-    })
-
-    if (!response.ok) {
-        throw new Error('Chat request failed')
-    }
-
-    const reader = response.body?.getReader()
-    if (!reader) {
-        throw new Error('Failed to get response reader')
-    }
-
-    const decoder = new TextDecoder()
-
     try {
-        while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
+        const response = await fetch('http://localhost:8000/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message })
+        })
 
-            const chunk = decoder.decode(value, { stream: true })
-            
-            // Check for errors in the stream
-            if (chunk.startsWith('Error:')) {
-                throw new Error(chunk)
-            }
-            
-            // Send each chunk directly to the callback
-            if (onChunk && chunk) {
-                onChunk(chunk)
-            }
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(`Chat request failed: ${response.status} - ${errorText}`)
         }
-    } finally {
-        reader.releaseLock()
+
+        if (!response.body) {
+            throw new Error('Response body is empty')
+        }
+
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder('utf-8')
+        let buffer = ''
+
+        try {
+            while (true) {
+                const { done, value } = await reader.read()
+
+                if (value) {
+                    buffer += decoder.decode(value, { stream: true })
+                }
+
+                if (done) {
+                    // Flush any remaining data in the buffer
+                    const final = decoder.decode()
+                    if (final) {
+                        buffer += final
+                    }
+                    break
+                }
+
+                // Process complete chunks from buffer
+                while (buffer.length > 0) {
+                    if (onChunk) {
+                        onChunk(buffer)
+                        buffer = ''
+                    } else {
+                        break
+                    }
+                }
+            }
+        } finally {
+            reader.releaseLock()
+        }
+    } catch (error) {
+        console.error('Chat API Error:', error)
+        throw error
     }
 }
 

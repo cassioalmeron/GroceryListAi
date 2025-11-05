@@ -32,7 +32,11 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
 
   const getAIResponse = async (userMessage: string, onChunk: (chunk: string) => void): Promise<void> => {
     try {
-      await chat(userMessage, onChunk);
+      await chat(userMessage, (chunk) => {
+        if (chunk) {
+          onChunk(chunk);
+        }
+      });
     } catch (error) {
       console.error('Error getting AI response:', error);
       throw error;
@@ -70,8 +74,8 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
 
       await getAIResponse(userMessage.text, (newChunk) => {
         // Append the new chunk to the AI message
-        setMessages(prev => prev.map(msg => 
-          msg.id === aiMessageId 
+        setMessages(prev => prev.map(msg =>
+          msg.id === aiMessageId
             ? { ...msg, text: msg.text + newChunk }
             : msg
         ));
@@ -83,9 +87,10 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
       }
     } catch (error) {
       console.error('Chat error:', error);
+      const errorText = error instanceof Error ? error.message : 'Unknown error';
       const errorMessage: Message = {
-        id: Date.now() + 1,
-        text: "Sorry, I encountered an error connecting to the AI service. Please check your connection and try again.",
+        id: Date.now() + 2,
+        text: `Error: ${errorText}. Please check your connection and try again.`,
         sender: 'ai',
         timestamp: new Date()
       };
