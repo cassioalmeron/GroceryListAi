@@ -7,4 +7,8 @@ export default defineConfig({
   server: {
     port: 81, // Change this to your desired port
   },
+  define: {
+    // Inject build timestamp at build time
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
 })

@@ -1,7 +1,11 @@
 import axios from 'axios'
 
+// Get API URL from environment variable with fallback
+console.log('VITE_API_URL:', import.meta.env.VITE_API_URL)
+const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
 const api = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: apiUrl,
 })
 
 export const getGroceryList = async () => {
@@ -30,7 +34,7 @@ export const markItemAsChecked = async (id: number, checked: boolean) => {
 
 export const chat = async(message: string, onChunk?: (chunk: string) => void) => {
     try {
-        const response = await fetch('http://localhost:8000/chat', {
+        const response = await fetch(`${apiUrl}/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
