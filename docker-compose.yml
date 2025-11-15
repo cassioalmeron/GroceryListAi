@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    container_name: grocerylist-backend
+    ports:
+      - "5002:8000"
+    environment:
+      - API_PORT=8000
+      - PYTHONUNBUFFERED=1
+      - LLM=chatgpt
+      - MODEL=gpt-3.5-turbo
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-KEY HERE}
+      - DATABASE_URL=sqlite:///./grocery_list.db
+      - SERVICE_NAME=Grocery List AI
+      - SERVICE_DESCRIPTION=AI-powered Grocery List Application
+    volumes:
+      - ./Server/logs:/app/logs
+    networks:
+      - grocerylist-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./Web
+      dockerfile: Dockerfile
+    container_name: grocerylist-frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://backend:8000
+    networks:
+      - grocerylist-network
+    restart: unless-stopped
+
+networks:
+  grocerylist-network:
+    driver: bridge
