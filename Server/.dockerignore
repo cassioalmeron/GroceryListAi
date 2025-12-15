@@ -14,7 +14,6 @@ Dockerfile
 .venv
 venv
 env
-node_modules
 .coverage
 htmlcov
 build
