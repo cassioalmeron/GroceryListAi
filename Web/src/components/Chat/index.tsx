@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './style.css';
 import { chat } from '../../../api';
+import { getLanguage } from '../../utils/language';
 
 interface Message {
   id: number;
@@ -135,7 +136,7 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
     const recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = false;
-    recognition.lang = 'en-US';
+    recognition.lang = getLanguage();
     recognition.maxAlternatives = 1;
 
     recognition.onresult = (event: any) => {

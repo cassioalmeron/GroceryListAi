@@ -1,9 +1,42 @@
+.settings-icon-button {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background-color: #2a2a2a;
+  border: 1px solid #4a4a4a;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 1000;
+  padding: 0;
+  color: #ffffff;
+}
+
+.settings-icon-button:hover {
+  background-color: #3a3a3a;
+  border-color: #646cff;
+  transform: rotate(45deg);
+}
+
+.settings-icon-button:active {
+  transform: rotate(45deg) scale(0.95);
+}
+
+.settings-icon-button svg {
+  pointer-events: none;
+}
+
 .left-panel {
-    flex: 1;
-    min-width: 400px;
-  }
-  
-  .right-panel {
-    flex: 1;
-    min-width: 400px;
-  }
+  flex: 1;
+  min-width: 400px;
+}
+
+.right-panel {
+  flex: 1;
+  min-width: 400px;
+}
