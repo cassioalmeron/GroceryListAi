@@ -19,6 +19,7 @@ services:
       - SERVICE_DESCRIPTION=${SERVICE_DESCRIPTION}
     volumes:
       - backend-logs:/app/logs
+      - backend-data:/data
     networks:
       - grocerylist-network
     healthcheck:
@@ -51,4 +52,6 @@ networks:
 
 volumes:
   backend-logs:
+    driver: local
+  backend-data:
     driver: local
