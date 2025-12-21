@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { HomeIcon, SettingsIcon } from '../icons';
 import './style.css';
 
 interface SidebarProps {
@@ -39,10 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 onClick={() => handleNavigation('/')}
                 className={`sidebar-nav-link ${location.pathname === '/' ? 'active' : ''}`}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
+                <HomeIcon />
                 Home
               </button>
             </li>
@@ -51,11 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                 onClick={() => handleNavigation('/settings')}
                 className={`sidebar-nav-link ${location.pathname === '/settings' ? 'active' : ''}`}
               >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path d="M12 1v6m0 6v6m-6-6h6m6 0h6"></path>
-                  <path d="M19.07 4.93l-4.24 4.24m0 5.66l4.24 4.24M4.93 4.93l4.24 4.24m0 5.66l-4.24 4.24"></path>
-                </svg>
+                <SettingsIcon />
                 Settings
               </button>
             </li>
