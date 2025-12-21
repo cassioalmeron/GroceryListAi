@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery List AI - Settings</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Dark theme color scheme matching the original app */
+        body {
+            background-color: #1a1a1a;
+            color: rgba(255, 255, 255, 0.87);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex">
+    <!-- Left Sidebar Navigation -->
+    <aside id="sidebar" class="sidebar fixed md:sticky top-0 left-0 h-screen w-64 bg-[#2a2a2a] border-r border-[#404040] flex flex-col z-50">
+        <!-- Logo/Brand -->
+        <div class="p-6 border-b border-[#404040]">
+            <h2 class="text-xl font-semibold text-white">Grocery List AI</h2>
+        </div>
+
+        <!-- Navigation Links -->
+        <nav class="flex-1 p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-[#3a3a3a] hover:text-white rounded-lg font-medium transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 bg-[#646cff] text-white rounded-lg font-medium transition-colors">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M12 1v6m0 6v6m-6-6h6m6 0h6"></path>
+                            <path d="M19.07 4.93l-4.24 4.24m0 5.66l4.24 4.24M4.93 4.93l4.24 4.24m0 5.66l-4.24 4.24"></path>
+                        </svg>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Footer info -->
+        <div class="p-4 border-t border-[#404040] text-xs text-white/50">
+            <p>Version 1.0.0</p>
+            <p class="mt-1">Last updated: Dec 20, 2025 at 3:45 PM</p>
+        </div>
+    </aside>
+
+    <!-- Mobile Menu Button -->
+    <button
+        id="menuToggle"
+        class="md:hidden fixed top-4 left-4 bg-[#2a2a2a] border border-[#4a4a4a] rounded-lg w-12 h-12 flex items-center justify-center hover:bg-[#3a3a3a] hover:border-[#646cff] transition-all z-40"
+        onclick="toggleMenu()"
+    >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <!-- Overlay for mobile menu -->
+    <div id="overlay" class="md:hidden hidden fixed inset-0 bg-black/50 z-40" onclick="toggleMenu()"></div>
+
+    <!-- Settings Container -->
+    <div class="flex-1 overflow-auto">
+        <div class="flex justify-center items-start min-h-screen p-8">
+        <div class="max-w-3xl w-full bg-[#2a2a2a] rounded-lg shadow-xl p-8">
+            <!-- Settings Header -->
+            <h1 class="text-3xl font-semibold text-white mb-8 pb-4 border-b-2 border-[#4a4a4a]">
+                Settings
+            </h1>
+
+            <!-- Microphone Section -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-white mb-4">Microphone</h2>
+
+                <div class="flex flex-col gap-2">
+                    <label for="language-select" class="text-white font-medium">Language</label>
+                    <select
+                        id="language-select"
+                        class="max-w-xs px-3 py-2 bg-[#3a3a3a] text-white border border-[#4a4a4a] rounded cursor-pointer hover:border-[#646cff] hover:bg-[#404040] focus:outline-none focus:border-[#646cff] focus:shadow-[0_0_0_2px_rgba(100,108,255,0.2)] transition-all"
+                        onchange="handleLanguageChange()"
+                    >
+                        <option value="en-US">English</option>
+                        <option value="pt-BR">Portuguese</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Additional Settings Sections (for demonstration) -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-white mb-4">Notifications</h2>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-white font-medium block">Enable Notifications</label>
+                            <p class="text-[#cccccc] text-sm mt-1">Receive notifications for important updates</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-[#555] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#646cff] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#646cff]"></div>
+                        </label>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-white font-medium block">Sound Effects</label>
+                            <p class="text-[#cccccc] text-sm mt-1">Play sounds when adding or removing items</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 bg-[#555] peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#646cff] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#646cff]"></div>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Appearance Section -->
+            <section class="mb-8">
+                <h2 class="text-2xl font-semibold text-white mb-4">Appearance</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-white font-medium block mb-2">Theme</label>
+                        <div class="flex gap-4">
+                            <button class="px-6 py-2 bg-[#646cff] text-white rounded-lg font-medium shadow-md hover:bg-[#535bf2] transition-colors">
+                                Dark
+                            </button>
+                            <button class="px-6 py-2 bg-[#3a3a3a] text-white border border-[#555] rounded-lg font-medium hover:bg-[#404040] transition-colors">
+                                Light
+                            </button>
+                            <button class="px-6 py-2 bg-[#3a3a3a] text-white border border-[#555] rounded-lg font-medium hover:bg-[#404040] transition-colors">
+                                Auto
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="font-size" class="text-white font-medium block mb-2">Font Size</label>
+                        <input
+                            type="range"
+                            id="font-size"
+                            min="12"
+                            max="20"
+                            value="16"
+                            class="w-full max-w-xs h-2 bg-[#555] rounded-lg appearance-none cursor-pointer accent-[#646cff]"
+                        >
+                        <div class="flex justify-between max-w-xs text-sm text-[#cccccc] mt-1">
+                            <span>Small</span>
+                            <span>Medium</span>
+                            <span>Large</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Save Button -->
+            <div class="mt-8 pt-6 border-t border-[#4a4a4a]">
+                <button
+                    onclick="saveSettings()"
+                    class="w-full sm:w-auto px-8 py-3 bg-[#646cff] text-white rounded-lg hover:bg-[#535bf2] transition-colors font-medium shadow-md"
+                >
+                    Save Changes
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('hidden');
+        }
+
+
+        // Language change handler
+        function handleLanguageChange() {
+            const select = document.getElementById('language-select');
+            const selectedLanguage = select.value;
+
+            // Show a temporary notification (in real app, this would update the system)
+            showNotification(`Language changed to: ${select.options[select.selectedIndex].text}`);
+        }
+
+        // Save settings handler
+        function saveSettings() {
+            showNotification('Settings saved successfully!');
+        }
+
+        // Simple notification system
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-4 bg-[#10b981] text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all';
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize with saved language preference (from localStorage in real app)
+        window.addEventListener('DOMContentLoaded', () => {
+            // In a real app, this would load from localStorage or API
+            const savedLanguage = localStorage.getItem('language') || 'en-US';
+            document.getElementById('language-select').value = savedLanguage;
+        });
+    </script>
+</body>
+</html>
