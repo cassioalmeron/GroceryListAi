@@ -1,42 +1,54 @@
-.settings-icon-button {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background-color: #2a2a2a;
-  border: 1px solid #4a4a4a;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
+.home-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+
+.home-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.home-panels {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  z-index: 1000;
-  padding: 0;
-  color: #ffffff;
-}
-
-.settings-icon-button:hover {
-  background-color: #3a3a3a;
-  border-color: #646cff;
-  transform: rotate(45deg);
-}
-
-.settings-icon-button:active {
-  transform: rotate(45deg) scale(0.95);
-}
-
-.settings-icon-button svg {
-  pointer-events: none;
+  flex-direction: row;
+  gap: 2rem;
+  min-height: calc(100vh - 8rem);
+  align-items: stretch;
 }
 
 .left-panel {
   flex: 1;
-  min-width: 400px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .left-panel {
+    min-width: 400px;
+  }
 }
 
 .right-panel {
   flex: 1;
-  min-width: 400px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .right-panel {
+    min-width: 400px;
+  }
+}
+
+/* Responsive layout */
+@media (max-width: 1023px) {
+  .home-panels {
+    flex-direction: column;
+    gap: 2rem;
+    min-height: auto;
+  }
 }

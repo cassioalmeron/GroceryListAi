@@ -1,27 +1,29 @@
 .todo-list-container {
-  width: 100%;
   height: 100%;
-  padding: 1rem;
+  flex: 1;
+  padding: 1.5rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
   background-color: #2a2a2a;
-  border-radius: 12px;
+  border-radius: 0.75rem;
   border: 1px solid #404040;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
 }
 
 .todo-list-container h1 {
   text-align: center;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 1rem;
+  color: white;
+  margin: 0 0 1.5rem 0;
   font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .add-todo {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
+  flex-shrink: 0;
 }
 
 .todo-input {
