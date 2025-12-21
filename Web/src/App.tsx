@@ -4,7 +4,6 @@ import './App.css'
 import { Home } from './Pages/Home'
 import { Tests } from './Pages/Tests'
 import Settings from './Pages/Settings'
-import Footer from './components/Footer'
 import Sidebar from './components/Sidebar'
 import { MenuIcon } from './components/icons'
 
