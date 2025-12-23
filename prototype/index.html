@@ -8,32 +8,11 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Shared Styles -->
+    <link rel="stylesheet" href="styles.css">
+
     <style>
-        /* Dark theme color scheme matching the original app */
-        body {
-            background-color: #1a1a1a;
-            color: rgba(255, 255, 255, 0.87);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        /* Custom scrollbar styling */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #2a2a2a;
-            border-radius: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #555;
-            border-radius: 4px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #666;
-        }
+        /* Page-specific styles for index.html */
 
         /* Typing indicator animation */
         @keyframes typing {
@@ -59,30 +38,6 @@
             animation-delay: -0.16s;
         }
 
-        /* Pulse animation for status indicator */
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        /* Loading spinner */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .spinner {
-            animation: spin 1s linear infinite;
-        }
-
         /* Settings button rotation on hover */
         .settings-btn:hover svg {
             transform: rotate(45deg);
@@ -102,35 +57,21 @@
         .recording {
             animation: pulse-red 1.5s infinite;
         }
-
-        /* Sidebar styles */
-        .sidebar {
-            transition: transform 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-        }
     </style>
 </head>
 <body class="min-h-screen flex">
     <!-- Left Sidebar Navigation -->
-    <aside id="sidebar" class="sidebar fixed md:sticky top-0 left-0 h-screen w-64 bg-[#2a2a2a] border-r border-[#404040] flex flex-col z-50">
+    <aside id="sidebar" class="sidebar fixed md:sticky top-0 left-0 h-screen w-64 flex flex-col z-50" style="background-color: var(--sidebar-bg); border-right: 1px solid var(--sidebar-border);">
         <!-- Logo/Brand -->
-        <div class="p-6 border-b border-[#404040]">
-            <h2 class="text-xl font-semibold text-white">Grocery List AI</h2>
+        <div class="p-6" style="border-bottom: 1px solid var(--sidebar-border);">
+            <h2 class="text-xl font-semibold" style="color: var(--text-primary);">Grocery List AI</h2>
         </div>
 
         <!-- Navigation Links -->
         <nav class="flex-1 p-4">
             <ul class="space-y-2">
                 <li>
-                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 bg-[#646cff] text-white rounded-lg font-medium transition-colors">
+                    <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors" style="background-color: var(--accent-primary); color: white;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -139,7 +80,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-white/70 hover:bg-[#3a3a3a] hover:text-white rounded-lg font-medium transition-colors">
+                    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors" style="color: var(--text-secondary);" onmouseover="this.style.backgroundColor='var(--bg-hover)'; this.style.color='var(--text-primary)';" onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--text-secondary)';">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="3"></circle>
                             <path d="M12 1v6m0 6v6m-6-6h6m6 0h6"></path>
@@ -152,7 +93,7 @@
         </nav>
 
         <!-- Footer info -->
-        <div class="p-4 border-t border-[#404040] text-xs text-white/50">
+        <div class="p-4 text-xs" style="border-top: 1px solid var(--sidebar-border); color: var(--text-muted);">
             <p>Version 1.0.0</p>
             <p class="mt-1">Last updated: Dec 20, 2025 at 3:45 PM</p>
         </div>
@@ -161,7 +102,10 @@
     <!-- Mobile Menu Button -->
     <button
         id="menuToggle"
-        class="md:hidden fixed top-4 left-4 bg-[#2a2a2a] border border-[#4a4a4a] rounded-lg w-12 h-12 flex items-center justify-center hover:bg-[#3a3a3a] hover:border-[#646cff] transition-all z-40"
+        class="md:hidden fixed top-4 left-4 rounded-lg w-12 h-12 flex items-center justify-center transition-all z-40"
+        style="background-color: var(--bg-card); border: 1px solid var(--border-primary); color: var(--text-primary);"
+        onmouseover="this.style.backgroundColor='var(--bg-hover)'; this.style.borderColor='var(--accent-primary)';"
+        onmouseout="this.style.backgroundColor='var(--bg-card)'; this.style.borderColor='var(--border-primary)';"
         onclick="toggleMenu()"
     >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -181,8 +125,8 @@
 
             <!-- Left Panel - Todo List -->
             <div class="flex-1 min-w-0 lg:min-w-[400px]">
-                <div class="h-full bg-[#2a2a2a] rounded-xl border border-[#404040] shadow-lg flex flex-col p-6">
-                    <h1 class="text-2xl font-semibold text-white text-center mb-6">Todo List</h1>
+                <div class="h-full rounded-xl shadow-lg flex flex-col p-6" style="background-color: var(--bg-card); border: 1px solid var(--border-primary);">
+                    <h1 class="text-2xl font-semibold text-center mb-6" style="color: var(--text-primary);">Todo List</h1>
 
                     <!-- Add Todo Input -->
                     <div class="flex gap-4 mb-8">
@@ -190,11 +134,17 @@
                             type="text"
                             id="todoInput"
                             placeholder="Enter a new todo..."
-                            class="flex-1 px-3 py-2 bg-[#3a3a3a] text-white border-2 border-[#555] rounded-lg outline-none focus:border-[#646cff] transition-colors placeholder:text-white/50"
+                            class="flex-1 px-3 py-2 rounded-lg outline-none transition-colors"
+                            style="background-color: var(--input-bg); color: var(--text-primary); border: 2px solid var(--input-border);"
+                            onfocus="this.style.borderColor='var(--accent-primary)';"
+                            onblur="this.style.borderColor='var(--input-border)';"
                         />
                         <button
                             onclick="addTodo()"
-                            class="px-6 py-2 bg-[#646cff] text-white rounded-lg hover:bg-[#535bf2] transition-colors font-medium"
+                            class="px-6 py-2 text-white rounded-lg font-medium transition-colors"
+                            style="background-color: var(--accent-primary);"
+                            onmouseover="this.style.backgroundColor='var(--accent-hover)';"
+                            onmouseout="this.style.backgroundColor='var(--accent-primary)';"
                         >
                             Add
                         </button>
@@ -203,31 +153,31 @@
                     <!-- Todo List -->
                     <ul id="todoList" class="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
                         <!-- Sample todos -->
-                        <li class="flex items-center gap-4 p-4 bg-[#3a3a3a] border border-[#555] rounded-lg hover:bg-[#4a4a4a] transition-colors">
+                        <li class="flex items-center gap-4 p-4 rounded-lg transition-colors" style="background-color: var(--bg-tertiary); border: 1px solid var(--border-secondary);" onmouseover="this.style.backgroundColor='var(--bg-hover)';" onmouseout="this.style.backgroundColor='var(--bg-tertiary)';">
                             <input type="checkbox" class="w-5 h-5 cursor-pointer accent-[#646cff]" onchange="toggleTodo(this)">
-                            <span class="flex-1 text-white">Buy milk</span>
-                            <button onclick="removeTodo(this)" class="px-4 py-1 bg-[#dc3545] text-white rounded-md hover:bg-[#c82333] transition-colors text-sm">
+                            <span class="flex-1" style="color: var(--text-primary);">Buy milk</span>
+                            <button onclick="removeTodo(this)" class="px-4 py-1 text-white rounded-md transition-colors text-sm" style="background-color: var(--danger);" onmouseover="this.style.backgroundColor='#c82333';" onmouseout="this.style.backgroundColor='var(--danger)';">
                                 Remove
                             </button>
                         </li>
-                        <li class="flex items-center gap-4 p-4 bg-[#3a3a3a] border border-[#555] rounded-lg hover:bg-[#4a4a4a] transition-colors">
+                        <li class="flex items-center gap-4 p-4 rounded-lg transition-colors" style="background-color: var(--bg-tertiary); border: 1px solid var(--border-secondary);" onmouseover="this.style.backgroundColor='var(--bg-hover)';" onmouseout="this.style.backgroundColor='var(--bg-tertiary)';">
                             <input type="checkbox" class="w-5 h-5 cursor-pointer accent-[#646cff]" onchange="toggleTodo(this)">
-                            <span class="flex-1 text-white">Buy eggs</span>
-                            <button onclick="removeTodo(this)" class="px-4 py-1 bg-[#dc3545] text-white rounded-md hover:bg-[#c82333] transition-colors text-sm">
+                            <span class="flex-1" style="color: var(--text-primary);">Buy eggs</span>
+                            <button onclick="removeTodo(this)" class="px-4 py-1 text-white rounded-md transition-colors text-sm" style="background-color: var(--danger);" onmouseover="this.style.backgroundColor='#c82333';" onmouseout="this.style.backgroundColor='var(--danger)';">
                                 Remove
                             </button>
                         </li>
-                        <li class="flex items-center gap-4 p-4 bg-[#333] border border-[#555] rounded-lg opacity-60">
+                        <li class="flex items-center gap-4 p-4 rounded-lg opacity-60" style="background-color: var(--bg-secondary); border: 1px solid var(--border-secondary);">
                             <input type="checkbox" class="w-5 h-5 cursor-pointer accent-[#646cff]" checked onchange="toggleTodo(this)">
-                            <span class="flex-1 text-white/50 line-through">Buy bread</span>
-                            <button onclick="removeTodo(this)" class="px-4 py-1 bg-[#dc3545] text-white rounded-md hover:bg-[#c82333] transition-colors text-sm">
+                            <span class="flex-1 line-through" style="color: var(--text-muted);">Buy bread</span>
+                            <button onclick="removeTodo(this)" class="px-4 py-1 text-white rounded-md transition-colors text-sm" style="background-color: var(--danger);" onmouseover="this.style.backgroundColor='#c82333';" onmouseout="this.style.backgroundColor='var(--danger)';">
                                 Remove
                             </button>
                         </li>
                     </ul>
 
                     <!-- Empty State (hidden by default) -->
-                    <p id="emptyMessage" class="text-center text-white/50 italic mt-8 hidden">
+                    <p id="emptyMessage" class="text-center italic mt-8 hidden" style="color: var(--text-muted);">
                         No todos yet. Add one above!
                     </p>
                 </div>
@@ -235,28 +185,28 @@
 
             <!-- Right Panel - Chat -->
             <div class="flex-1 min-w-0 lg:min-w-[400px]">
-                <div class="h-full bg-[#2a2a2a] rounded-xl border border-[#404040] shadow-lg flex flex-col overflow-hidden">
+                <div class="h-full rounded-xl shadow-lg flex flex-col overflow-hidden" style="background-color: var(--bg-card); border: 1px solid var(--border-primary);">
 
                     <!-- Chat Header -->
-                    <div class="flex justify-between items-center px-6 py-4 bg-[#333333] border-b border-[#404040]">
-                        <h2 class="text-xl font-semibold text-white">AI Assistant</h2>
-                        <div class="flex items-center gap-2 text-[#10b981] text-sm font-medium">
-                            <span class="w-2 h-2 bg-[#10b981] rounded-full pulse"></span>
+                    <div class="flex justify-between items-center px-6 py-4" style="background-color: var(--bg-secondary); border-bottom: 1px solid var(--border-primary);">
+                        <h2 class="text-xl font-semibold" style="color: var(--text-primary);">AI Assistant</h2>
+                        <div class="flex items-center gap-2 text-sm font-medium" style="color: var(--success);">
+                            <span class="w-2 h-2 rounded-full pulse" style="background-color: var(--success);"></span>
                             Online
                         </div>
                     </div>
 
                     <!-- Chat Messages -->
-                    <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-[#2a2a2a]">
+                    <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar" style="background-color: var(--bg-card);">
                         <!-- Welcome Message -->
                         <div class="text-center py-8">
-                            <h3 class="text-lg text-white/80 mb-2">Welcome!</h3>
-                            <p class="text-sm text-white/60">Start a conversation with the AI assistant. Ask me anything!</p>
+                            <h3 class="text-lg mb-2" style="color: var(--text-secondary);">Welcome!</h3>
+                            <p class="text-sm" style="color: var(--text-muted);">Start a conversation with the AI assistant. Ask me anything!</p>
                         </div>
 
                         <!-- Sample User Message -->
                         <div class="flex justify-end">
-                            <div class="max-w-[70%] bg-[#3b82f6] text-white px-4 py-3 rounded-2xl rounded-br-md">
+                            <div class="max-w-[70%] text-white px-4 py-3 rounded-2xl rounded-br-md" style="background-color: var(--chat-user-bg);">
                                 <div class="mb-1">Add milk to my list</div>
                                 <div class="text-xs opacity-70 text-right">2:30 PM</div>
                             </div>
@@ -264,7 +214,7 @@
 
                         <!-- Sample AI Message -->
                         <div class="flex justify-start">
-                            <div class="max-w-[70%] bg-[#404040] text-white border border-[#555] px-4 py-3 rounded-2xl rounded-bl-md">
+                            <div class="max-w-[70%] px-4 py-3 rounded-2xl rounded-bl-md" style="background-color: var(--chat-ai-bg); color: var(--chat-ai-text); border: 1px solid var(--chat-ai-border);">
                                 <div class="mb-1">I've added milk to your grocery list!</div>
                                 <div class="text-xs opacity-70">2:30 PM</div>
                             </div>
@@ -272,7 +222,7 @@
 
                         <!-- Typing Indicator (hidden by default) -->
                         <div id="typingIndicator" class="flex justify-start hidden">
-                            <div class="bg-[#404040] border border-[#555] px-4 py-3 rounded-2xl rounded-bl-md">
+                            <div class="px-4 py-3 rounded-2xl rounded-bl-md" style="background-color: var(--chat-ai-bg); border: 1px solid var(--chat-ai-border);">
                                 <div class="flex items-center gap-1">
                                     <span class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot"></span>
                                     <span class="w-1.5 h-1.5 bg-gray-400 rounded-full typing-dot"></span>
@@ -283,13 +233,14 @@
                     </div>
 
                     <!-- Chat Input -->
-                    <div class="px-6 py-4 bg-[#333333] border-t border-[#404040]">
-                        <div class="flex items-end gap-3 bg-[#404040] border border-[#555] rounded-3xl p-2 focus-within:border-[#3b82f6] focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.1)] transition-all">
+                    <div class="px-6 py-4" style="background-color: var(--bg-secondary); border-top: 1px solid var(--border-primary);">
+                        <div class="flex items-end gap-3 rounded-3xl p-2 transition-all" style="background-color: var(--input-bg); border: 1px solid var(--input-border);" onfocusin="this.style.borderColor='var(--accent-primary)'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)';" onfocusout="this.style.borderColor='var(--input-border)'; this.style.boxShadow='none';">
                             <textarea
                                 id="chatInput"
                                 rows="1"
                                 placeholder="Type your message here..."
-                                class="flex-1 bg-transparent text-white text-sm px-3 py-2 outline-none resize-none placeholder:text-white/50"
+                                class="flex-1 bg-transparent text-sm px-3 py-2 outline-none resize-none"
+                                style="color: var(--text-primary);"
                                 onkeypress="handleChatKeyPress(event)"
                             ></textarea>
 
@@ -297,7 +248,10 @@
                             <button
                                 id="micButton"
                                 onclick="toggleRecording()"
-                                class="w-10 h-10 bg-[#10b981] text-white rounded-full flex items-center justify-center hover:bg-[#059669] hover:scale-105 transition-all flex-shrink-0"
+                                class="w-10 h-10 text-white rounded-full flex items-center justify-center transition-all flex-shrink-0"
+                                style="background-color: var(--success);"
+                                onmouseover="this.style.backgroundColor='#059669'; this.style.transform='scale(1.05)';"
+                                onmouseout="this.style.backgroundColor='var(--success)'; this.style.transform='scale(1)';"
                                 title="Start voice recording"
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -311,7 +265,12 @@
                             <!-- Send Button -->
                             <button
                                 onclick="sendMessage()"
-                                class="w-10 h-10 bg-[#3b82f6] text-white rounded-full flex items-center justify-center hover:bg-[#2563eb] hover:scale-105 active:scale-95 transition-all flex-shrink-0"
+                                class="w-10 h-10 text-white rounded-full flex items-center justify-center transition-all flex-shrink-0"
+                                style="background-color: var(--chat-user-bg);"
+                                onmouseover="this.style.backgroundColor='#2563eb'; this.style.transform='scale(1.05)';"
+                                onmouseout="this.style.backgroundColor='var(--chat-user-bg)'; this.style.transform='scale(1)';"
+                                onmousedown="this.style.transform='scale(0.95)';"
+                                onmouseup="this.style.transform='scale(1.05)';"
                             >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -361,11 +320,15 @@
 
             // Create new todo item
             const li = document.createElement('li');
-            li.className = 'flex items-center gap-4 p-4 bg-[#3a3a3a] border border-[#555] rounded-lg hover:bg-[#4a4a4a] transition-colors';
+            li.className = 'flex items-center gap-4 p-4 rounded-lg transition-colors';
+            li.style.backgroundColor = 'var(--bg-tertiary)';
+            li.style.border = '1px solid var(--border-secondary)';
+            li.onmouseover = function() { this.style.backgroundColor = 'var(--bg-hover)'; };
+            li.onmouseout = function() { this.style.backgroundColor = 'var(--bg-tertiary)'; };
             li.innerHTML = `
                 <input type="checkbox" class="w-5 h-5 cursor-pointer accent-[#646cff]" onchange="toggleTodo(this)">
-                <span class="flex-1 text-white">${text}</span>
-                <button onclick="removeTodo(this)" class="px-4 py-1 bg-[#dc3545] text-white rounded-md hover:bg-[#c82333] transition-colors text-sm">
+                <span class="flex-1" style="color: var(--text-primary);">${text}</span>
+                <button onclick="removeTodo(this)" class="px-4 py-1 text-white rounded-md transition-colors text-sm" style="background-color: var(--danger);" onmouseover="this.style.backgroundColor='#c82333';" onmouseout="this.style.backgroundColor='var(--danger)';">
                     Remove
                 </button>
             `;
@@ -391,11 +354,22 @@
             const span = li.querySelector('span');
 
             if (checkbox.checked) {
-                li.className = 'flex items-center gap-4 p-4 bg-[#333] border border-[#555] rounded-lg opacity-60';
-                span.className = 'flex-1 text-white/50 line-through';
+                li.className = 'flex items-center gap-4 p-4 rounded-lg opacity-60';
+                li.style.backgroundColor = 'var(--bg-secondary)';
+                li.style.border = '1px solid var(--border-secondary)';
+                li.onmouseover = null;
+                li.onmouseout = null;
+                span.className = 'flex-1 line-through';
+                span.style.color = 'var(--text-muted)';
             } else {
-                li.className = 'flex items-center gap-4 p-4 bg-[#3a3a3a] border border-[#555] rounded-lg hover:bg-[#4a4a4a] transition-colors';
-                span.className = 'flex-1 text-white';
+                li.className = 'flex items-center gap-4 p-4 rounded-lg transition-colors';
+                li.style.backgroundColor = 'var(--bg-tertiary)';
+                li.style.border = '1px solid var(--border-secondary)';
+                li.style.opacity = '1';
+                li.onmouseover = function() { this.style.backgroundColor = 'var(--bg-hover)'; };
+                li.onmouseout = function() { this.style.backgroundColor = 'var(--bg-tertiary)'; };
+                span.className = 'flex-1';
+                span.style.color = 'var(--text-primary)';
             }
         }
 
@@ -412,7 +386,7 @@
             const userMessage = document.createElement('div');
             userMessage.className = 'flex justify-end';
             userMessage.innerHTML = `
-                <div class="max-w-[70%] bg-[#3b82f6] text-white px-4 py-3 rounded-2xl rounded-br-md">
+                <div class="max-w-[70%] text-white px-4 py-3 rounded-2xl rounded-br-md" style="background-color: var(--chat-user-bg);">
                     <div class="mb-1">${text}</div>
                     <div class="text-xs opacity-70 text-right">${getCurrentTime()}</div>
                 </div>
@@ -435,7 +409,7 @@
                 const aiMessage = document.createElement('div');
                 aiMessage.className = 'flex justify-start';
                 aiMessage.innerHTML = `
-                    <div class="max-w-[70%] bg-[#404040] text-white border border-[#555] px-4 py-3 rounded-2xl rounded-bl-md">
+                    <div class="max-w-[70%] px-4 py-3 rounded-2xl rounded-bl-md" style="background-color: var(--chat-ai-bg); color: var(--chat-ai-text); border: 1px solid var(--chat-ai-border);">
                         <div class="mb-1">This is a prototype. In the real app, I would respond to: "${text}"</div>
                         <div class="text-xs opacity-70">${getCurrentTime()}</div>
                     </div>
@@ -502,6 +476,30 @@
             if (event.key === 'Enter') {
                 addTodo();
             }
+        });
+
+        // Theme initialization
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const savedActualTheme = localStorage.getItem('actualTheme') || 'dark';
+
+            // Apply saved theme
+            document.documentElement.setAttribute('data-theme', savedActualTheme);
+        }
+
+        // Initialize theme on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+
+            // Listen for system theme changes when Auto is selected
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                const currentTheme = localStorage.getItem('theme');
+                if (currentTheme === 'auto') {
+                    const newTheme = e.matches ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('actualTheme', newTheme);
+                }
+            });
         });
     </script>
 </body>
