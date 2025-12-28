@@ -1,6 +1,7 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import './style.css';
 import { getGroceryList, addItem, deleteItem, markItemAsChecked } from '../../../api';
+import { toast } from 'react-toastify';
 
 interface Todo {
   id: number
@@ -43,6 +44,7 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
     } catch (err) {
       setError('Failed to load todos')
       console.error('Error loading todos:', err)
+      toast.error('Failed to load todos. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -64,9 +66,11 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
       }
       setTodos([...todos, newTodo])
       setInputValue('')
+      toast.success('Item added successfully!')
     } catch (err) {
       setError('Failed to add todo')
       console.error('Error adding todo:', err)
+      toast.error('Failed to add item. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -79,32 +83,36 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
       await deleteItem(id)
       // Remove the item from our local state
       setTodos(todos.filter(todo => todo.id !== id))
+      toast.success('Item deleted successfully!')
     } catch (err) {
       setError('Failed to delete todo')
       console.error('Error deleting todo:', err)
+      toast.error('Failed to delete item. Please try again.')
     } finally {
       setLoading(false)
     }
   }
 
   const toggleTodo = async (id: number) => {
-    
+
     const todo = todos.find(t => t.id === id)
     if (!todo) return
 
     const newCheckedState = !todo.checked
-    
+
     try {
       setLoading(true)
       setError(null)
       await markItemAsChecked(id, newCheckedState)
       // Update local state after successful API call
-      setTodos(todos.map(todo => 
+      setTodos(todos.map(todo =>
         todo.id === id ? { ...todo, checked: newCheckedState } : todo
       ))
+      toast.success(newCheckedState ? 'Item marked as completed!' : 'Item marked as incomplete!')
     } catch (err) {
       setError('Failed to update todo status')
       console.error('Error updating todo:', err)
+      toast.error('Failed to update item status. Please try again.')
     } finally {
       setLoading(false)
     }

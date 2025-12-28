@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import './style.css';
 import { chat } from '../../../api';
 import { getLanguage } from '../../utils/language';
+import { toast } from 'react-toastify';
 
 interface Message {
   id: number;
@@ -153,12 +154,12 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
     recognition.onerror = (event: any) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
-      
+
       // Show error message
       if (event.error === 'not-allowed') {
-        alert('Microphone permission denied. Please allow microphone access and try again.');
+        toast.error('Microphone permission denied. Please allow microphone access and try again.');
       } else if (event.error === 'no-speech') {
-        alert('No speech detected. Please try speaking again.');
+        toast.warning('No speech detected. Please try speaking again.');
       }
     };
 

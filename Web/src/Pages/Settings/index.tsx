@@ -2,41 +2,32 @@ import { useState, useEffect } from 'react';
 import { getLanguage, setLanguage as saveLanguage } from '../../utils/language';
 import type { Language } from '../../utils/language';
 import { useTheme, type Theme } from '../../contexts/ThemeContext';
+import { toast } from 'react-toastify';
 import './styles.css';
 
 const Settings = () => {
   const [language, setLanguage] = useState<Language>('en-US');
-  const [showNotification, setShowNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState('');
   const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     setLanguage(getLanguage());
   }, []);
 
-  const showNotificationMessage = (message: string) => {
-    setNotificationMessage(message);
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-    }, 3000);
-  };
-
   const handleLanguageChange = (newLanguage: Language) => {
     setLanguage(newLanguage);
     saveLanguage(newLanguage);
     const languageName = newLanguage === 'en-US' ? 'English' : 'Portuguese';
-    showNotificationMessage(`Language changed to: ${languageName}`);
+    toast.success(`Language changed to: ${languageName}`);
   };
 
   const handleThemeChange = (newTheme: Theme) => {
     setTheme(newTheme);
     const themeName = newTheme.charAt(0).toUpperCase() + newTheme.slice(1);
-    showNotificationMessage(`Theme changed to: ${themeName}`);
+    toast.success(`Theme changed to: ${themeName}`);
   };
 
   const handleSaveSettings = () => {
-    showNotificationMessage('Settings saved successfully!');
+    toast.success('Settings saved successfully!');
   };
 
   return (
@@ -145,13 +136,6 @@ const Settings = () => {
           </div>
         </div>
       </div>
-
-      {/* Notification */}
-      {showNotification && (
-        <div className="notification">
-          {notificationMessage}
-        </div>
-      )}
     </div>
   );
 };
