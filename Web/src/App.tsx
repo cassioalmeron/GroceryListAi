@@ -6,6 +6,7 @@ import { Tests } from './Pages/Tests'
 import Settings from './Pages/Settings'
 import Sidebar from './components/Sidebar'
 import { MenuIcon } from './components/icons'
+import { ThemeProvider } from './contexts/ThemeContext'
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -19,30 +20,32 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <div className="app">
-        {/* Mobile Menu Button */}
-        <button
-          className="menu-toggle"
-          onClick={toggleSidebar}
-          aria-label="Toggle menu"
-        >
-          <MenuIcon />
-        </button>
+    <ThemeProvider>
+      <BrowserRouter>
+        <div className="app">
+          {/* Mobile Menu Button */}
+          <button
+            className="menu-toggle"
+            onClick={toggleSidebar}
+            aria-label="Toggle menu"
+          >
+            <MenuIcon />
+          </button>
 
-        {/* Sidebar Navigation */}
-        <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
+          {/* Sidebar Navigation */}
+          <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
 
-        {/* Main Content */}
-        <div className="main-container">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/tests" element={<Tests />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
+          {/* Main Content */}
+          <div className="main-container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/tests" element={<Tests />} />
+              <Route path="/settings" element={<Settings />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 

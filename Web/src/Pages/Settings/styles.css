@@ -12,19 +12,20 @@
 }
 
 .settings-content {
-  background-color: #2a2a2a;
+  background-color: var(--bg-card);
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
   padding: 2rem;
+  border: 1px solid var(--border-primary);
 }
 
 .settings-title {
   font-size: 1.875rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin: 0 0 2rem 0;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #4a4a4a;
+  border-bottom: 2px solid var(--border-primary);
 }
 
 .settings-section {
@@ -34,7 +35,7 @@
 .settings-section-title {
   font-size: 1.5rem;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin: 0 0 1rem 0;
 }
 
@@ -45,13 +46,13 @@
 }
 
 .setting-label {
-  color: white;
+  color: var(--text-primary);
   font-weight: 500;
   display: block;
 }
 
 .setting-description {
-  color: #cccccc;
+  color: var(--text-secondary);
   font-size: 0.875rem;
   margin: 0.25rem 0 0 0;
 }
@@ -59,22 +60,22 @@
 .language-select {
   max-width: 300px;
   padding: 0.5rem 0.75rem;
-  background-color: #3a3a3a;
-  color: white;
-  border: 1px solid #4a4a4a;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
   border-radius: 0.25rem;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .language-select:hover {
-  border-color: #646cff;
-  background-color: #404040;
+  border-color: var(--accent-primary);
+  background-color: var(--bg-hover);
 }
 
 .language-select:focus {
   outline: none;
-  border-color: #646cff;
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 2px rgba(100, 108, 255, 0.2);
 }
 
@@ -112,7 +113,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #555;
+  background-color: var(--border-secondary);
   transition: 0.4s;
   border-radius: 24px;
 }
@@ -130,7 +131,7 @@
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background-color: #646cff;
+  background-color: var(--accent-primary);
 }
 
 .toggle-switch input:focus + .toggle-slider {
@@ -156,9 +157,9 @@
 
 .theme-button {
   padding: 0.5rem 1.5rem;
-  background-color: #3a3a3a;
-  color: white;
-  border: 1px solid #555;
+  background-color: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
   border-radius: 0.5rem;
   font-weight: 500;
   cursor: pointer;
@@ -168,12 +169,13 @@
 }
 
 .theme-button:hover {
-  background-color: #404040;
+  background-color: var(--bg-hover);
 }
 
 .theme-button.active {
-  background-color: #646cff;
-  border-color: #646cff;
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: white;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
@@ -181,11 +183,11 @@
   width: 100%;
   max-width: 300px;
   height: 8px;
-  background-color: #555;
+  background-color: var(--border-secondary);
   border-radius: 4px;
   outline: none;
   cursor: pointer;
-  accent-color: #646cff;
+  accent-color: var(--accent-primary);
   margin-top: 0.5rem;
 }
 
@@ -194,7 +196,7 @@
   justify-content: space-between;
   max-width: 300px;
   font-size: 0.875rem;
-  color: #cccccc;
+  color: var(--text-secondary);
   margin-top: 0.25rem;
 }
 
@@ -202,13 +204,13 @@
 .settings-actions {
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #4a4a4a;
+  border-top: 1px solid var(--border-primary);
 }
 
 .save-button {
   width: 100%;
   padding: 0.75rem 2rem;
-  background-color: #646cff;
+  background-color: var(--accent-primary);
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -221,7 +223,7 @@
 }
 
 .save-button:hover {
-  background-color: #535bf2;
+  background-color: var(--accent-hover);
 }
 
 @media (min-width: 640px) {
@@ -235,7 +237,7 @@
   position: fixed;
   top: 5rem;
   right: 1rem;
-  background-color: #10b981;
+  background-color: var(--success);
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;

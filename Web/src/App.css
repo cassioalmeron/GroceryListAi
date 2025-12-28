@@ -7,8 +7,8 @@
 .app {
   width: 100%;
   min-height: 100vh;
-  background-color: #1a1a1a;
-  color: rgba(255, 255, 255, 0.87);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   display: flex;
 }
 
@@ -25,20 +25,20 @@
   left: 1rem;
   width: 3rem;
   height: 3rem;
-  background-color: #2a2a2a;
-  border: 1px solid #4a4a4a;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-primary);
   border-radius: 0.5rem;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 40;
   transition: all 0.2s;
-  color: white;
+  color: var(--text-primary);
 }
 
 .menu-toggle:hover {
-  background-color: #3a3a3a;
-  border-color: #646cff;
+  background-color: var(--bg-hover);
+  border-color: var(--accent-primary);
 }
 
 @media (max-width: 768px) {

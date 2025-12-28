@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { getLanguage, setLanguage as saveLanguage } from '../../utils/language';
 import type { Language } from '../../utils/language';
+import { useTheme, type Theme } from '../../contexts/ThemeContext';
 import './styles.css';
 
 const Settings = () => {
   const [language, setLanguage] = useState<Language>('en-US');
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     setLanguage(getLanguage());
@@ -25,6 +27,12 @@ const Settings = () => {
     saveLanguage(newLanguage);
     const languageName = newLanguage === 'en-US' ? 'English' : 'Portuguese';
     showNotificationMessage(`Language changed to: ${languageName}`);
+  };
+
+  const handleThemeChange = (newTheme: Theme) => {
+    setTheme(newTheme);
+    const themeName = newTheme.charAt(0).toUpperCase() + newTheme.slice(1);
+    showNotificationMessage(`Theme changed to: ${themeName}`);
   };
 
   const handleSaveSettings = () => {
@@ -89,9 +97,24 @@ const Settings = () => {
               <div>
                 <label className="setting-label">Theme</label>
                 <div className="theme-buttons">
-                  <button className="theme-button active">Dark</button>
-                  <button className="theme-button">Light</button>
-                  <button className="theme-button">Auto</button>
+                  <button
+                    className={`theme-button ${theme === 'dark' ? 'active' : ''}`}
+                    onClick={() => handleThemeChange('dark')}
+                  >
+                    Dark
+                  </button>
+                  <button
+                    className={`theme-button ${theme === 'light' ? 'active' : ''}`}
+                    onClick={() => handleThemeChange('light')}
+                  >
+                    Light
+                  </button>
+                  <button
+                    className={`theme-button ${theme === 'auto' ? 'active' : ''}`}
+                    onClick={() => handleThemeChange('auto')}
+                  >
+                    Auto
+                  </button>
                 </div>
               </div>
 
