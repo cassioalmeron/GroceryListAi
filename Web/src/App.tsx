@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { HashRouter, Route, Routes } from 'react-router-dom'
 import { useState } from 'react'
 import './App.css'
 import { Home } from './Pages/Home'
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      <HashRouter>
         <div className="app">
           {/* Mobile Menu Button */}
           <button
@@ -44,7 +44,7 @@ function App() {
             </Routes>
           </div>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeProvider>
   )
 }
