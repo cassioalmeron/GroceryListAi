@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './style.css';
 import { chat } from '../../../api';
-import { getLanguage } from '../../utils/language';
-import { toast } from 'react-toastify';
+import VoiceButton from '../VoiceButton';
 
 interface Message {
   id: number;
@@ -19,10 +18,7 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const [speechSupported, setSpeechSupported] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const recognitionRef = useRef<any>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -109,73 +105,6 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
     }
   };
 
-  const startVoiceRecording = () => {
-    if (recognitionRef.current && !isListening && !isTyping) {
-      setIsListening(true);
-      recognitionRef.current.start();
-    }
-  };
-
-  const stopVoiceRecording = () => {
-    if (recognitionRef.current && isListening) {
-      recognitionRef.current.stop();
-      setIsListening(false);
-    }
-  };
-
-  // Initialize speech recognition
-  useEffect(() => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      console.warn('Speech recognition not supported');
-      return;
-    }
-
-    setSpeechSupported(true);
-
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-    recognition.lang = getLanguage();
-    recognition.maxAlternatives = 1;
-
-    recognition.onresult = (event: any) => {
-      const transcript = event.results[0][0].transcript;
-      setInputValue(transcript);
-      setIsListening(false);
-      
-      // Auto-send the transcribed message
-      setTimeout(() => {
-        handleSendMessageWithText(transcript);
-      }, 100);
-    };
-
-    recognition.onerror = (event: any) => {
-      console.error('Speech recognition error:', event.error);
-      setIsListening(false);
-
-      // Show error message
-      if (event.error === 'not-allowed') {
-        toast.error('Microphone permission denied. Please allow microphone access and try again.');
-      } else if (event.error === 'no-speech') {
-        toast.warning('No speech detected. Please try speaking again.');
-      }
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognitionRef.current = recognition;
-
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-    };
-  }, []);
-
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
@@ -197,7 +126,7 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
             <p>Start a conversation with the AI assistant. Ask me anything!</p>
           </div>
         )}
-        
+
         {messages.map((message) => (
           <div
             key={message.id}
@@ -209,7 +138,7 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
             </div>
           </div>
         ))}
-        
+
         {isTyping && (
           <div className="message ai-message">
             <div className="message-content">
@@ -221,7 +150,7 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
             </div>
           </div>
         )}
-        
+
         <div ref={messagesEndRef} />
       </div>
 
@@ -234,34 +163,17 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
             placeholder="Type your message here..."
             className="chat-input"
             rows={1}
-            disabled={isTyping || isListening}
+            disabled={isTyping}
           />
-          
-          {/* Microphone Button */}
-          <button
-            onClick={isListening ? stopVoiceRecording : startVoiceRecording}
-            disabled={isTyping || !speechSupported}
-            className={`microphone-button ${isListening ? 'recording' : ''}`}
-            title={isListening ? 'Stop recording' : 'Start voice recording'}
-          >
-            {isListening ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="6" y="6" width="12" height="12" rx="2" ry="2"></rect>
-                <rect x="11" y="11" width="2" height="2"></rect>
-              </svg>
-            ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="8" y1="23" x2="16" y2="23"></line>
-              </svg>
-            )}
-          </button>
-          
+
+          <VoiceButton
+            onTranscript={(text) => handleSendMessageWithText(text)}
+            disabled={isTyping}
+          />
+
           <button
             onClick={handleSendMessage}
-            disabled={inputValue.trim() === '' || isTyping || isListening}
+            disabled={inputValue.trim() === '' || isTyping}
             className="send-button"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -270,18 +182,6 @@ const Chat: React.FC<ChatProps> = ({ onResponseComplete }) => {
             </svg>
           </button>
         </div>
-        
-        {/* Recording Status */}
-        {Boolean(isListening) && (
-          <div className="recording-status">
-            <div className="recording-indicator">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <span>Listening... Speak now</span>
-          </div>
-        )}
       </div>
     </div>
   );

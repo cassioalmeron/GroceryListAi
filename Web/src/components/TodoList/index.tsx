@@ -1,7 +1,8 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import './style.css';
-import { getGroceryList, addItem, deleteItem, markItemAsChecked } from '../../../api';
+import { getGroceryList, addItem, deleteItem, markItemAsChecked, chat } from '../../../api';
 import { toast } from 'react-toastify';
+import VoiceButton from '../VoiceButton';
 
 interface Todo {
   id: number
@@ -124,6 +125,19 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
     }
   }
 
+  const handleVoiceTranscript = async (text: string) => {
+    try {
+      setLoading(true)
+      await chat(text, () => {})
+      await loadTodos()
+    } catch (err) {
+      console.error('Voice command error:', err)
+      toast.error('Voice command failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const retryLoad = () => {
     loadTodos()
   }
@@ -151,8 +165,9 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
           className="todo-input"
           disabled={loading}
         />
-        <button 
-          onClick={addTodo} 
+        <VoiceButton onTranscript={handleVoiceTranscript} disabled={loading} />
+        <button
+          onClick={addTodo}
           className="add-button"
           disabled={loading || inputValue.trim() === ''}
         >

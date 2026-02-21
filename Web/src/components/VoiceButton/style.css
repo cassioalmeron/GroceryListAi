@@ -1,0 +1,116 @@
+/* Microphone Button */
+.microphone-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  background-color: var(--success) !important;
+  color: white;
+  border: none !important;
+  border-radius: 50% !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  padding: 0 !important;
+  font-weight: 400;
+}
+
+.microphone-button svg {
+  width: 20px;
+  height: 20px;
+  color: white;
+  stroke: white;
+}
+
+.microphone-button:hover:not(:disabled) {
+  background-color: #059669 !important;
+  border-color: transparent !important;
+  transform: scale(1.05);
+}
+
+.microphone-button:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.microphone-button:focus,
+.microphone-button:focus-visible {
+  outline: none;
+}
+
+.microphone-button:disabled {
+  background-color: #666 !important;
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.microphone-button.recording {
+  background-color: #ef4444 !important;
+  animation: pulse-red 1.5s infinite;
+}
+
+.microphone-button.recording:hover {
+  background-color: #dc2626 !important;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Recording Status */
+.recording-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 0.75rem;
+  color: #ef4444;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.recording-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.recording-indicator span {
+  width: 0.25rem;
+  height: 0.75rem;
+  background-color: #ef4444;
+  border-radius: 0.125rem;
+  animation: recording-pulse 1.5s infinite ease-in-out;
+}
+
+.recording-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.recording-indicator span:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.recording-indicator span:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+@keyframes recording-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
