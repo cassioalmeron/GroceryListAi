@@ -160,8 +160,11 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
         </button>
       </div>
 
-      <ul className="todo-list">
-        {todos.map(todo => (
+      {(() => {
+        const uncheckedTodos = todos.filter(t => !t.checked)
+        const checkedTodos = todos.filter(t => t.checked)
+
+        const renderItem = (todo: Todo) => (
           <li key={todo.id} className={`todo-item ${todo.checked ? 'completed' : ''}`}>
             <input
               type="checkbox"
@@ -171,7 +174,7 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
               disabled={loading}
             />
             <span className="todo-text">{todo.description}</span>
-            <button 
+            <button
               onClick={() => removeTodo(todo.id)}
               className="remove-button"
               disabled={loading}
@@ -179,12 +182,31 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
               {loading ? '...' : 'Remove'}
             </button>
           </li>
-        ))}
-      </ul>
+        )
 
-      {todos.length === 0 && !loading && !error && (
-        <p className="empty-message">No todos yet. Add one above!</p>
-      )}
+        return (
+          <div className="todo-sections">
+            <ul className="todo-list">
+              {uncheckedTodos.map(renderItem)}
+            </ul>
+
+            {uncheckedTodos.length === 0 && !loading && !error && (
+              <p className="empty-message">No items pending. Add one above!</p>
+            )}
+
+            {checkedTodos.length > 0 && (
+              <>
+                <div className="section-divider">
+                  <span>Completed</span>
+                </div>
+                <ul className="todo-list checked-section">
+                  {checkedTodos.map(renderItem)}
+                </ul>
+              </>
+            )}
+          </div>
+        )
+      })()}
 
       {loading && todos.length === 0 && (
         <div className="loading-message">

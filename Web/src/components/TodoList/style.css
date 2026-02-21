@@ -71,12 +71,41 @@
   cursor: not-allowed;
 }
 
+.todo-sections {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
 .todo-list {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-divider::before,
+.section-divider::after {
+  content: '';
   flex: 1;
-  overflow-y: auto;
+  height: 1px;
+  background-color: var(--border-secondary);
+}
+
+.checked-section {
+  opacity: 0.85;
 }
 
 .todo-item {
