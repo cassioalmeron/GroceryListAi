@@ -3,12 +3,13 @@ name = "grocery-list"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "dotenv>=0.9.9",
     "fastapi>=0.118.0",
     "ollama>=0.6.0",
     "openai>=2.2.0",
+    "psycopg2-binary>=2.9",
     "sqlalchemy>=2.0.44",
     "uvicorn>=0.37.0",
 ]
