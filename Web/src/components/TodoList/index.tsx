@@ -3,6 +3,7 @@ import './style.css';
 import { getGroceryList, addItem, deleteItem, markItemAsChecked, chat } from '../../../api';
 import { toast } from 'react-toastify';
 import VoiceButton from '../VoiceButton';
+import { TrashIcon } from '../icons';
 
 interface Todo {
   id: number
@@ -194,7 +195,7 @@ const TodoList = forwardRef<TodoListRef>((_props, ref) => {
               className="remove-button"
               disabled={loading}
             >
-              {loading ? '...' : 'Remove'}
+              <TrashIcon size={18} color="white" />
             </button>
           </li>
         )
