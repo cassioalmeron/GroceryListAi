@@ -7,6 +7,22 @@ A modern full-stack web application that combines grocery list management with A
 ![Python](https://img.shields.io/badge/Python-3.11+-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
+## Voice Control
+
+![Voice Control](docs/images/image.png)
+
+GroceryListAI supports **voice commands** — just click the microphone icon and speak naturally. The AI understands your intent and updates the list automatically.
+
+**Example commands:**
+
+| Voice Command | Action |
+|---|---|
+| "Add Tomato" | Adds Tomato to the list |
+| "Remove Tomato" | Removes Tomato from the list |
+| "Check Tomato" | Marks Tomato as purchased |
+
+The app works in **English and Portuguese** — just speak in your preferred language. The language can be configured in the settings.
+
 ## Table of Contents
 
 - [Features](#features)
