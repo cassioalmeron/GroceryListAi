@@ -1,357 +1,98 @@
 # Grocery List API Contract
 
 ## Base URL
-```
-http://localhost:8000
+
+The API listens on `http://localhost:5071` when started with `dotnet run`, and on `API_PORT` in Docker. In Docker Compose the frontend's nginx also proxies `/api/` to the backend.
+
+All request bodies are JSON (`Content-Type: application/json`). JSON property names are camelCase.
+
+## Item
+
+```json
+{
+  "id": 1,
+  "description": "Milk",
+  "checked": false,
+  "createdAt": "2026-10-28T15:03:47.123",
+  "updatedAt": "2026-10-28T15:03:47.123"
+}
 ```
 
-## Headers
-All requests should include:
-```
-Content-Type: application/json
-```
+Timestamps are UTC. `updatedAt` changes whenever the item is modified.
+
+## Errors
+
+| Status | Body |
+|---|---|
+| `400 Bad Request` | Validation failure — ASP.NET Core `ValidationProblemDetails` (`errors` keyed by field) |
+| `404 Not Found` | `{ "message": "Item not found" }` |
+| `500 Internal Server Error` | `{ "message": "Error ..." }` — details are logged on the server, not returned |
 
 ---
 
-## Endpoints
+## GET /health
 
-### 1. Health Check
+Health check.
 
-**GET** `/health`
-
-Check if the API is running.
-
-#### Request
-No parameters required.
-
-#### Response
+**Response `200`**
 ```json
-{
-  "message": "Grocery List API is running"
-}
+{ "message": "Grocery List API is running" }
 ```
 
-#### Status Codes
-- `200 OK`: API is running
+## GET /api/items
 
----
+Lists all items in insertion order.
 
-### 2. Get All Items
+**Response `200`** — array of [Item](#item).
 
-**GET** `/items`
+## POST /api/items
 
-Retrieve all grocery list items.
+Creates an item. `checked` starts as `false`.
 
-#### Request
-No parameters required.
-
-#### Response
+**Request**
 ```json
-[
-  {
-    "id": 1,
-    "description": "Milk",
-    "checked": false
-  },
-  {
-    "id": 2,
-    "description": "Bread",
-    "checked": true
-  }
-]
+{ "description": "Milk" }
 ```
 
-#### Status Codes
-- `200 OK`: Items retrieved successfully
+`description` is required, 1–255 characters.
 
----
+**Response `200`** — the created [Item](#item).
+**Response `400`** — missing, empty or too-long `description`.
 
-### 3. Create Item
+## PATCH /api/items/{id}/checked
 
-**POST** `/items`
+Sets an item's checked state.
 
-Create a new grocery list item.
-
-#### Request Body
+**Request**
 ```json
-{
-  "description": "Eggs"
-}
+{ "checked": true }
 ```
 
-#### Response
+**Response `200`** — the updated [Item](#item).
+**Response `404`** — no item with that `id`.
+
+## DELETE /api/items/{id}
+
+Deletes an item.
+
+**Response `200`**
 ```json
-{
-  "message": "Item created",
-  "item": {
-    "id": 3,
-    "description": "Eggs",
-    "checked": false
-  }
-}
+{ "message": "Item deleted" }
 ```
 
-#### Status Codes
-- `200 OK`: Item created successfully
+**Response `404`** — no item with that `id` (also for a non-integer `id`).
 
----
+## POST /api/chat
 
-### 4. Delete Item
+Sends a message to the assistant. The LLM can call tools that add, remove, check or uncheck items, then replies in natural language.
 
-**DELETE** `/items/{item_id}`
-
-Delete a specific grocery list item.
-
-#### URL Parameters
-- `item_id` (integer, required): The ID of the item to delete
-
-#### Request
-No body required.
-
-#### Response (Success)
+**Request**
 ```json
-{
-  "message": "Item deleted"
-}
+{ "message": "Add milk and eggs" }
 ```
 
-#### Response (Not Found)
-```json
-{
-  "message": "Item not found"
-}
-```
+**Response `200`** — `Content-Type: text/event-stream`. The body is the assistant's reply as **raw text chunks** written as they arrive (no `data:` framing); read it with a stream reader and concatenate the chunks.
 
-#### Status Codes
-- `200 OK`: Item deleted or not found
+If the LLM fails before anything is written, the status is `500`. If it fails mid-stream, the response simply ends early; the error is only logged on the server.
 
-#### Example
-```
-DELETE /items/1
-```
-
----
-
-### 5. Update Item Checked Status
-
-**PATCH** `/items/{item_id}/checked`
-
-Update the checked status of a specific item.
-
-#### URL Parameters
-- `item_id` (integer, required): The ID of the item to update
-
-#### Request Body
-```json
-{
-  "checked": true
-}
-```
-
-#### Response (Success)
-```json
-{
-  "message": "Item updated",
-  "item": {
-    "id": 1,
-    "description": "Milk",
-    "checked": true
-  }
-}
-```
-
-#### Response (Not Found)
-```json
-{
-  "message": "Item not found"
-}
-```
-
-#### Status Codes
-- `200 OK`: Item updated or not found
-
-#### Example
-```
-PATCH /items/1/checked
-Body: {"checked": true}
-```
-
----
-
-### 6. Chat with AI (Streaming)
-
-**POST** `/chat`
-
-Send a message to the AI and receive a streaming response.
-
-#### Request Body (Format 1: Single Message)
-```json
-{
-  "message": "What should I buy for dinner?"
-}
-```
-
-#### Request Body (Format 2: Full Conversation History)
-```json
-{
-  "messages": [
-    {
-      "role": "user",
-      "content": "What should I buy for dinner?"
-    },
-    {
-      "role": "assistant",
-      "content": "I recommend buying chicken, vegetables, and rice."
-    },
-    {
-      "role": "user",
-      "content": "What vegetables would be best?"
-    }
-  ]
-}
-```
-
-#### Message Roles
-- `user`: Message from the user
-- `assistant`: Response from the AI
-- `system`: (Optional) System instructions
-
-#### Response
-The response is a **Server-Sent Events (SSE)** stream with `Content-Type: text/event-stream`.
-
-The AI response is streamed in chunks as plain text.
-
-#### Response Headers
-```
-Content-Type: text/event-stream
-Cache-Control: no-cache
-Connection: keep-alive
-X-Accel-Buffering: no
-```
-
-#### Example Response Stream
-```
-Hello
- there
-!
- I
- recommend
- buying
- carrots
-,
- broccoli
-,
- and
- bell
- peppers
-.
-```
-
-#### Status Codes
-- `200 OK`: Stream started successfully
-
-#### Error Handling
-If an error occurs during streaming, an error message will be sent in the stream:
-```
-Error: <error message>
-```
-
-#### JavaScript Example
-```javascript
-const response = await fetch('/chat', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    messages: [
-      { role: 'user', content: 'What should I buy?' }
-    ]
-  })
-});
-
-const reader = response.body.getReader();
-const decoder = new TextDecoder();
-
-while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
-  
-  const chunk = decoder.decode(value);
-  console.log('Received:', chunk);
-}
-```
-
----
-
-## Environment Variables
-
-The API requires the following environment variables:
-
-### For ChatGPT
-```env
-LLM=chatgpt
-MODEL=gpt-3.5-turbo
-OPENAI_API_KEY=your_api_key_here
-```
-
-### For Ollama
-```env
-LLM=ollama
-MODEL=llama2
-# No API key required, Ollama runs locally
-```
-
----
-
-## CORS
-
-CORS is enabled for all origins (`*`). The following headers are allowed:
-- All origins
-- All methods (GET, POST, PATCH, DELETE, etc.)
-- All headers
-- Credentials are allowed
-
----
-
-## Data Models
-
-### Item
-```typescript
-{
-  id: number;           // Auto-incremented ID
-  description: string;  // Item description
-  checked: boolean;     // Whether item is checked
-}
-```
-
-### Message
-```typescript
-{
-  role: "user" | "assistant" | "system";
-  content: string;
-}
-```
-
----
-
-## Error Handling
-
-### Chat Endpoint Errors
-Errors in the chat endpoint are returned as part of the stream:
-```
-Error: <error description>
-```
-
-### General Errors
-The API may return standard HTTP error codes for invalid requests.
-
----
-
-## Notes
-
-1. **In-Memory Storage**: Items are stored in memory and will be lost when the server restarts.
-2. **Streaming**: The `/chat` endpoint uses Server-Sent Events for streaming responses.
-3. **AI Provider**: The API supports both ChatGPT (OpenAI) and Ollama as AI providers.
-4. **Conversation History**: To maintain conversation context, send the full message history in the `/chat` request.
-
+After a chat call, re-fetch `GET /api/items` to see the changes the assistant made.

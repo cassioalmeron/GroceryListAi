@@ -1,7 +1,7 @@
 # Plan: Convert Backend from Python/FastAPI to C#/.NET
 
 **Date:** 16/08/2026
-**Status:** In Progress (Phase 7 complete — Docker not smoke-tested, Docker Desktop unavailable in this environment)
+**Status:** Done — deployed and verified in production on 2026-10-28; legacy `items` data copied into `"Item"` and the old table dropped
 
 ## Objective
 
