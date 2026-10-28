@@ -13,10 +13,11 @@ interface Message {
 }
 
 interface ChatProps {
+  listId: number;
   onResponseComplete?: () => void;
 }
 
-export const Chat = ({ onResponseComplete }: ChatProps) => {
+export const Chat = ({ listId, onResponseComplete }: ChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -32,7 +33,7 @@ export const Chat = ({ onResponseComplete }: ChatProps) => {
 
   const getAIResponse = async (userMessage: string, onChunk: (chunk: string) => void): Promise<void> => {
     try {
-      await chat(userMessage, (chunk) => {
+      await chat(userMessage, listId, (chunk) => {
         if (chunk) {
           onChunk(chunk);
         }

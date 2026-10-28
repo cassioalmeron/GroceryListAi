@@ -1,6 +1,53 @@
 @GroceryListAi.Api_HostAddress = http://localhost:5071
 
-GET {{GroceryListAi.Api_HostAddress}}/api/items
+GET {{GroceryListAi.Api_HostAddress}}/api/items?listId=1
 Accept: application/json
+
+###
+
+POST {{GroceryListAi.Api_HostAddress}}/api/items
+Content-Type: application/json
+
+{
+  "description": "Milk",
+  "listId": 1
+}
+
+###
+
+POST {{GroceryListAi.Api_HostAddress}}/api/chat
+Content-Type: application/json
+
+{
+  "message": "add milk",
+  "listId": 1
+}
+
+###
+
+GET {{GroceryListAi.Api_HostAddress}}/api/lists
+Accept: application/json
+
+###
+
+POST {{GroceryListAi.Api_HostAddress}}/api/lists
+Content-Type: application/json
+
+{
+  "name": "Pharmacy"
+}
+
+###
+
+PUT {{GroceryListAi.Api_HostAddress}}/api/lists/1
+Content-Type: application/json
+
+{
+  "name": "Supermarket"
+}
+
+###
+
+DELETE {{GroceryListAi.Api_HostAddress}}/api/lists/2
 
 ###

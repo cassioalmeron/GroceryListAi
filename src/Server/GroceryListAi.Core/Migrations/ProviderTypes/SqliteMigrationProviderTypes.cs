@@ -8,6 +8,9 @@ public class SqliteMigrationProviderTypes : IMigrationProviderTypes
     public string Bool => "INTEGER";
     public string DateTime => "TEXT";
 
+    // SQLite has no length-limited text type
+    public string String(int maxLength) => "TEXT";
+
     public string BoolLiteral(bool value) => value ? "1" : "0";
 
     public OperationBuilder<AddColumnOperation> AsAutoIncrementPrimaryKey(OperationBuilder<AddColumnOperation> column) =>

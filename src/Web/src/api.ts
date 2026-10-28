@@ -7,13 +7,40 @@ export const api = axios.create({
   baseURL: apiUrl,
 })
 
-export const getGroceryList = async () => {
-    const response = await api.get('/api/items')
+export interface GroceryListSummary {
+    id: number
+    name: string
+    createdAt: string
+    updatedAt: string
+}
+
+export const getLists = async (): Promise<GroceryListSummary[]> => {
+    const response = await api.get('/api/lists')
     return response.data
 }
 
-export const addItem = async (description: string) => {
-    const response = await api.post('/api/items', { description })
+export const createList = async (name: string): Promise<GroceryListSummary> => {
+    const response = await api.post('/api/lists', { name })
+    return response.data
+}
+
+export const renameList = async (id: number, name: string): Promise<GroceryListSummary> => {
+    const response = await api.put(`/api/lists/${id}`, { name })
+    return response.data
+}
+
+export const deleteList = async (id: number) => {
+    const response = await api.delete(`/api/lists/${id}`)
+    return response.data
+}
+
+export const getGroceryList = async (listId: number) => {
+    const response = await api.get('/api/items', { params: { listId } })
+    return response.data
+}
+
+export const addItem = async (description: string, listId: number) => {
+    const response = await api.post('/api/items', { description, listId })
     return response.data
 }
 
@@ -27,14 +54,14 @@ export const markItemAsChecked = async (id: number, checked: boolean) => {
     return response.data
 }
 
-export const chat = async(message: string, onChunk?: (chunk: string) => void) => {
+export const chat = async(message: string, listId: number, onChunk?: (chunk: string) => void) => {
     try {
         const response = await fetch(`${apiUrl}/api/chat`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ message })
+            body: JSON.stringify({ message, listId })
         })
 
         if (!response.ok) {

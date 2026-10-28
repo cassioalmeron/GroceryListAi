@@ -37,6 +37,7 @@ The app works in **English and Portuguese** — just speak in your preferred lan
 
 ## Features
 
+- **Multiple lists** — create, rename and delete lists (e.g. "General", "Pharmacy") and switch between them from a dropdown; everything you do applies to the selected list.
 - **Grocery list** — add, delete, check and uncheck items; checked items are shown in a separate list.
 - **AI assistant** — natural-language commands handled by an LLM with tool calling (add, remove, check, uncheck), with the reply streamed back.
 - **Voice input** — Web Speech API, English and Portuguese.
@@ -71,7 +72,7 @@ GroceryListAi/
 │   ├── Web/                             # React + TypeScript frontend
 │   │   ├── src/
 │   │   │   ├── Pages/                   # Home, Settings, Tests
-│   │   │   ├── components/              # TodoList, Chat, Sidebar, VoiceButton, Footer, icons
+│   │   │   ├── components/              # ListSelector, TodoList, Chat, Sidebar, VoiceButton, Footer, icons
 │   │   │   ├── contexts/                # ThemeContext
 │   │   │   └── api.ts                   # API client
 │   │   └── Dockerfile
@@ -128,7 +129,7 @@ The backend is published on `API_PORT` and the frontend on `FRONTEND_PORT`.
 
 ## Configuration
 
-The backend reads environment variables, loaded from the nearest `.env` file (the repository root `.env` for Docker Compose). Use `.env.example` as the template.
+The backend reads environment variables, loaded from the nearest `.env` file (the repository root `.env` for Docker Compose). Use `.env.example` as the template. With Docker Compose, set every variable below: a variable missing from `.env` reaches the container as an empty string, and an empty `DATABASE_PROVIDER` stops the backend at startup.
 
 | Variable | Description |
 |---|---|
@@ -180,18 +181,22 @@ cd src/Server
 dotnet test GroceryListAi.slnx
 ```
 
-The integration tests run the API in memory against an in-memory SQLite database and a fake chat completion service, so no database server or LLM is needed. The frontend has no automated tests; `npm run lint` checks code quality.
+The integration tests run the API in memory against an in-memory SQLite database and a fake chat completion service, so no database server or LLM is needed. The migration tests also generate the full PostgreSQL migration script, which catches Postgres-only migration errors without a Postgres server. The frontend has no automated tests; `npm run lint` checks code quality.
 
 ## API
 
 | Method | Path | Description |
 |---|---|---|
 | GET | `/health` | Health check |
-| GET | `/api/items` | List all items |
-| POST | `/api/items` | Create an item |
+| GET | `/api/lists` | List all lists |
+| POST | `/api/lists` | Create a list |
+| PUT | `/api/lists/{id}` | Rename a list |
+| DELETE | `/api/lists/{id}` | Delete a list and its items (not the last one) |
+| GET | `/api/items?listId=` | List the items of a list |
+| POST | `/api/items` | Create an item in a list |
 | PATCH | `/api/items/{id}/checked` | Set an item's checked state |
 | DELETE | `/api/items/{id}` | Delete an item |
-| POST | `/api/chat` | Send a message to the assistant; the reply is streamed |
+| POST | `/api/chat` | Send a message to the assistant about a list; the reply is streamed |
 
 Request and response details: [docs/API_CONTRACT.md](docs/API_CONTRACT.md).
 

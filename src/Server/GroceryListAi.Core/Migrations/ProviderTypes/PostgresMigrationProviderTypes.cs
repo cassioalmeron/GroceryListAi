@@ -9,6 +9,8 @@ public class PostgresMigrationProviderTypes : IMigrationProviderTypes
     public string Bool => "boolean";
     public string DateTime => "timestamp with time zone";
 
+    public string String(int maxLength) => $"character varying({maxLength})";
+
     public string BoolLiteral(bool value) => value ? "true" : "false";
 
     public OperationBuilder<AddColumnOperation> AsAutoIncrementPrimaryKey(OperationBuilder<AddColumnOperation> column) =>

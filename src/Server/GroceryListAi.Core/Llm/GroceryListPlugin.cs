@@ -8,14 +8,19 @@ namespace GroceryListAi.Core.Llm;
 public class GroceryListPlugin
 {
     private readonly GroceryListAiDbContext _dbContext;
+    private readonly int _listId;
 
-    public GroceryListPlugin(GroceryListAiDbContext dbContext) => _dbContext = dbContext;
+    public GroceryListPlugin(GroceryListAiDbContext dbContext, int listId)
+    {
+        _dbContext = dbContext;
+        _listId = listId;
+    }
 
     [KernelFunction("add_item")]
     [Description("Adds a new item to the grocery list.")]
     public async Task<string> AddItemAsync([Description("The item description, e.g. 'Milk'.")] string description)
     {
-        var item = new Item { Description = description };
+        var item = new Item { ListId = _listId, Description = description };
 
         _dbContext.Items.Add(item);
         await _dbContext.SaveChangesAsync();
@@ -76,6 +81,7 @@ public class GroceryListPlugin
         var normalized = description.ToLower();
 
         return await _dbContext.Items
+            .Where(item => item.ListId == _listId)
             .Where(item => item.Description.ToLower().Contains(normalized))
             .OrderBy(item => item.Id)
             .FirstOrDefaultAsync();

@@ -7,6 +7,7 @@ public interface IMigrationProviderTypes
 {
     string Bool { get; }
     string DateTime { get; }
+    string String(int maxLength);
     string BoolLiteral(bool value);
     OperationBuilder<AddColumnOperation> AsAutoIncrementPrimaryKey(OperationBuilder<AddColumnOperation> column);
     string? ResetIdentitySequenceSql(string tableName, string idColumn);

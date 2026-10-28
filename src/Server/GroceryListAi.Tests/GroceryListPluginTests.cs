@@ -1,5 +1,6 @@
 using GroceryListAi.Core;
 using GroceryListAi.Core.Llm;
+using GroceryListAi.Core.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ public class GroceryListPluginTests : IDisposable
     private readonly SqliteConnection _connection;
     private readonly GroceryListAiDbContext _dbContext;
     private readonly GroceryListPlugin _plugin;
+    private readonly int _generalListId;
 
     public GroceryListPluginTests()
     {
@@ -22,8 +24,9 @@ public class GroceryListPluginTests : IDisposable
 
         _dbContext = new GroceryListAiDbContext(options);
         _dbContext.Database.Migrate();
+        _generalListId = _dbContext.Lists.Single(list => list.Name == "General").Id;
 
-        _plugin = new GroceryListPlugin(_dbContext);
+        _plugin = new GroceryListPlugin(_dbContext, _generalListId);
     }
 
     [Fact]
@@ -118,9 +121,59 @@ public class GroceryListPluginTests : IDisposable
         Assert.Contains("No item found", result);
     }
 
+    [Fact]
+    public async Task GroceryListPluginTests_Adding_an_item_saves_it_in_the_plugins_list()
+    {
+        await _plugin.AddItemAsync("Milk");
+
+        Assert.Equal(_generalListId, Assert.Single(_dbContext.Items).ListId);
+    }
+
+    [Fact]
+    public async Task GroceryListPluginTests_Items_of_another_list_are_not_matched_by_remove_check_or_uncheck()
+    {
+        var otherList = AddList("Pharmacy");
+        var otherPlugin = new GroceryListPlugin(_dbContext, otherList.Id);
+        await otherPlugin.AddItemAsync("Milk");
+        await otherPlugin.CheckItemAsync("Milk");
+
+        var removeResult = await _plugin.RemoveItemAsync("Milk");
+        var checkResult = await _plugin.CheckItemAsync("Milk");
+        var uncheckResult = await _plugin.UncheckItemAsync("Milk");
+
+        Assert.Contains("No item found", removeResult);
+        Assert.Contains("No item found", checkResult);
+        Assert.Contains("No item found", uncheckResult);
+        var untouched = Assert.Single(_dbContext.Items);
+        Assert.Equal(otherList.Id, untouched.ListId);
+        Assert.True(untouched.Checked);
+    }
+
+    [Fact]
+    public async Task GroceryListPluginTests_Checking_an_item_leaves_the_same_named_item_of_another_list_unchecked()
+    {
+        var otherList = AddList("Pharmacy");
+        await new GroceryListPlugin(_dbContext, otherList.Id).AddItemAsync("Milk");
+        await _plugin.AddItemAsync("Milk");
+
+        await _plugin.CheckItemAsync("Milk");
+
+        Assert.True(_dbContext.Items.Single(item => item.ListId == _generalListId).Checked);
+        Assert.False(_dbContext.Items.Single(item => item.ListId == otherList.Id).Checked);
+    }
+
     public void Dispose()
     {
         _dbContext.Dispose();
         _connection.Dispose();
+    }
+
+    private List AddList(string name)
+    {
+        var list = new List { Name = name };
+        _dbContext.Lists.Add(list);
+        _dbContext.SaveChanges();
+
+        return list;
     }
 }

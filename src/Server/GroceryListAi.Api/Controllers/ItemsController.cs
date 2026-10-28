@@ -1,6 +1,7 @@
 using GroceryListAi.Api.Dtos;
 using GroceryListAi.Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GroceryListAi.Api.Controllers;
 
@@ -18,11 +19,14 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<ItemResponse>>> GetItemsAsync()
+    public async Task<ActionResult<List<ItemResponse>>> GetItemsAsync([FromQuery, BindRequired] int listId)
     {
         try
         {
-            var items = await _itemService.GetAllAsync();
+            if (!await _itemService.ListExistsAsync(listId))
+                return NotFound(new { message = "List not found" });
+
+            var items = await _itemService.GetAllAsync(listId);
             return Ok(items.Select(ItemResponse.FromItem));
         }
         catch (Exception ex)
@@ -37,7 +41,10 @@ public class ItemsController : ControllerBase
     {
         try
         {
-            var item = await _itemService.CreateAsync(request.Description);
+            if (!await _itemService.ListExistsAsync(request.ListId))
+                return NotFound(new { message = "List not found" });
+
+            var item = await _itemService.CreateAsync(request.ListId, request.Description);
             return Ok(ItemResponse.FromItem(item));
         }
         catch (Exception ex)

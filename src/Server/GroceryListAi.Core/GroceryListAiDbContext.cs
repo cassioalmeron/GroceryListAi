@@ -13,6 +13,7 @@ public class GroceryListAiDbContext : DbContext
     {
     }
 
+    public DbSet<List> Lists => Set<List>();
     public DbSet<Item> Items => Set<Item>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -56,7 +57,7 @@ public class GroceryListAiDbContext : DbContext
     {
         var now = DateTime.UtcNow;
 
-        foreach (var entry in ChangeTracker.Entries<Item>())
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
         {
             if (entry.State == EntityState.Added)
                 entry.Entity.CreatedAt = now;

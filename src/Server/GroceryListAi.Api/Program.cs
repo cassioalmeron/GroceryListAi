@@ -53,13 +53,7 @@ builder.Services.AddDbContext<GroceryListAiDbContext>(options =>
 });
 
 builder.Services.AddInfrastructuralServices();
-builder.Services.AddScoped<GroceryListPlugin>();
-builder.Services.AddScoped(serviceProvider =>
-{
-    var kernel = KernelFactory.Create(LlmSettings.FromEnvironment());
-    kernel.Plugins.AddFromObject(serviceProvider.GetRequiredService<GroceryListPlugin>(), "GroceryList");
-    return kernel;
-});
+builder.Services.AddScoped(_ => KernelFactory.Create(LlmSettings.FromEnvironment()));
 
 var app = builder.Build();
 

@@ -20,6 +20,14 @@ public class ItemConfiguration : IEntityTypeConfiguration<Item>
             .IsRequired()
             .HasDefaultValue(false);
 
+        builder.Property(item => item.ListId)
+            .IsRequired();
+
+        builder.HasOne(item => item.List)
+            .WithMany(list => list.Items)
+            .HasForeignKey(item => item.ListId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Property(item => item.CreatedAt)
             .IsRequired();
 

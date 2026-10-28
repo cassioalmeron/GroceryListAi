@@ -1,5 +1,5 @@
 using GroceryListAi.Core;
-using GroceryListAi.Core.Llm;
+using GroceryListAi.Core.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -14,6 +14,8 @@ namespace GroceryListAi.Tests.Infrastructure;
 
 public class GroceryListAiWebApplicationFactory : WebApplicationFactory<Program>
 {
+    public const int GeneralListId = 1;
+
     private readonly SqliteConnection _connection = new("DataSource=:memory:");
     private readonly Func<Kernel?, IAsyncEnumerable<StreamingChatMessageContent>>? _chatResponder;
 
@@ -37,18 +39,27 @@ public class GroceryListAiWebApplicationFactory : WebApplicationFactory<Program>
                 return;
 
             services.RemoveAll<Kernel>();
-            services.AddScoped(serviceProvider =>
+            services.AddScoped(_ =>
             {
                 var kernelBuilder = Kernel.CreateBuilder();
                 kernelBuilder.Services.AddSingleton<IChatCompletionService>(
                     new FakeChatCompletionService(_chatResponder));
 
-                var kernel = kernelBuilder.Build();
-                kernel.Plugins.AddFromObject(serviceProvider.GetRequiredService<GroceryListPlugin>(), "GroceryList");
-
-                return kernel;
+                return kernelBuilder.Build();
             });
         });
+
+    public async Task<int> CreateListAsync(string name)
+    {
+        using var scope = Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<GroceryListAiDbContext>();
+
+        var list = new List { Name = name };
+        dbContext.Lists.Add(list);
+        await dbContext.SaveChangesAsync();
+
+        return list.Id;
+    }
 
     protected override void Dispose(bool disposing)
     {

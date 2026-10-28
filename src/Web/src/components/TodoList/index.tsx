@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import './styles.css';
 import { getGroceryList, addItem, deleteItem, markItemAsChecked, chat } from '@/api';
 import { toast } from 'react-toastify';
@@ -15,27 +15,23 @@ export interface TodoListRef {
   refreshTodos: () => void
 }
 
-export const TodoList = forwardRef<TodoListRef>((_props, ref) => {
+interface TodoListProps {
+  listId: number
+}
+
+export const TodoList = forwardRef<TodoListRef, TodoListProps>(({ listId }, ref) => {
   const [todos, setTodos] = useState<Todo[]>([])
   const [inputValue, setInputValue] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Load todos from API on component mount
-  useEffect(() => {
-    loadTodos()
-  }, [])
-
-  // Expose refreshTodos method to parent component
-  useImperativeHandle(ref, () => ({
-    refreshTodos: loadTodos
-  }))
-
-  const loadTodos = async () => {
+  // isCurrent lets a caller drop the response once the user has switched to another list
+  const loadTodos = useCallback(async (isCurrent: () => boolean = () => true) => {
     try {
       setLoading(true)
       setError(null)
-      const data = await getGroceryList()
+      const data = await getGroceryList(listId)
+      if (!isCurrent()) return
       // Map API response to our Todo interface
       const mappedTodos = data.map((item: { id: string; description: string; checked?: boolean }) => ({
         id: item.id,
@@ -44,13 +40,29 @@ export const TodoList = forwardRef<TodoListRef>((_props, ref) => {
       }))
       setTodos(mappedTodos)
     } catch (err) {
+      if (!isCurrent()) return
       setError('Failed to load todos')
       console.error('Error loading todos:', err)
       toast.error('Failed to load todos. Please try again.')
     } finally {
-      setLoading(false)
+      if (isCurrent()) setLoading(false)
     }
-  }
+  }, [listId])
+
+  // Load todos from API on mount and whenever the selected list changes
+  useEffect(() => {
+    let isActive = true
+    setTodos([])
+    loadTodos(() => isActive)
+    return () => {
+      isActive = false
+    }
+  }, [loadTodos])
+
+  // Expose refreshTodos method to parent component
+  useImperativeHandle(ref, () => ({
+    refreshTodos: () => loadTodos()
+  }))
 
   const addTodo = async () => {
     if (inputValue.trim() === '') return
@@ -59,7 +71,7 @@ export const TodoList = forwardRef<TodoListRef>((_props, ref) => {
       setLoading(true)
       setError(null)
       const description = inputValue.trim()
-      const newItem = await addItem(description)
+      const newItem = await addItem(description, listId)
       // Add the new item to our local state
       const newTodo: Todo = {
         id: newItem.id,
@@ -129,7 +141,7 @@ export const TodoList = forwardRef<TodoListRef>((_props, ref) => {
   const handleVoiceTranscript = async (text: string) => {
     try {
       setLoading(true)
-      await chat(text, () => {})
+      await chat(text, listId, () => {})
       await loadTodos()
     } catch (err) {
       console.error('Voice command error:', err)

@@ -1,10 +1,11 @@
 namespace GroceryListAi.Core.Models;
 
-public record Item
+public class Item : AuditableEntity
 {
     public int Id { get; set; }
     public required string Description { get; set; }
     public bool Checked { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public int ListId { get; set; }
+
+    public List? List { get; set; }
 }

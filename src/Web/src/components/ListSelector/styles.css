@@ -1,0 +1,144 @@
+.list-selector {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-primary);
+  border-radius: 0.75rem;
+}
+
+.list-selector-row,
+.list-selector-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.list-selector-form {
+  margin-top: 0.75rem;
+}
+
+.list-selector-label {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.list-selector-select,
+.list-selector-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+  transition: border-color 0.3s ease;
+}
+
+.list-selector-select:focus,
+.list-selector-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.list-selector-select:disabled,
+.list-selector-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.list-selector-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  flex-shrink: 0;
+  background-color: var(--accent-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.list-selector-action:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+}
+
+.list-selector-action:focus-visible,
+.list-selector-text-button:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+.list-selector-action:disabled,
+.list-selector-text-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.list-selector-danger {
+  background-color: var(--danger);
+}
+
+.list-selector-danger:hover:not(:disabled) {
+  background-color: #c82333;
+}
+
+.list-selector-save {
+  background-color: var(--success);
+}
+
+.list-selector-save:hover:not(:disabled) {
+  background-color: #0d9668;
+}
+
+.list-selector-action svg,
+.list-selector-action svg * {
+  stroke: white !important;
+  fill: none !important;
+}
+
+.list-selector-confirm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.list-selector-confirm-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.list-selector-text-button {
+  padding: 0.4rem 0.9rem;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-secondary);
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.list-selector-text-danger {
+  background-color: var(--danger);
+  border-color: var(--danger);
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .list-selector-label {
+    display: none;
+  }
+}

@@ -9,15 +9,19 @@ public class ItemService : IItemService
 
     public ItemService(GroceryListAiDbContext dbContext) => _dbContext = dbContext;
 
-    public Task<List<Item>> GetAllAsync() =>
+    public Task<bool> ListExistsAsync(int listId) =>
+        _dbContext.Lists.AnyAsync(list => list.Id == listId);
+
+    public Task<List<Item>> GetAllAsync(int listId) =>
         _dbContext.Items
             .AsNoTracking()
+            .Where(item => item.ListId == listId)
             .OrderBy(item => item.Id)
             .ToListAsync();
 
-    public async Task<Item> CreateAsync(string description)
+    public async Task<Item> CreateAsync(int listId, string description)
     {
-        var item = new Item { Description = description };
+        var item = new Item { ListId = listId, Description = description };
 
         _dbContext.Items.Add(item);
         await _dbContext.SaveChangesAsync();
