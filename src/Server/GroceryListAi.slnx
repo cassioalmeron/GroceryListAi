@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="GroceryListAi.Api/GroceryListAi.Api.csproj" />
+  <Project Path="GroceryListAi.AppHost/GroceryListAi.AppHost.csproj" />
+  <Project Path="GroceryListAi.Core/GroceryListAi.Core.csproj" />
+  <Project Path="GroceryListAi.ServiceDefaults/GroceryListAi.ServiceDefaults.csproj" />
+  <Project Path="GroceryListAi.Tests/GroceryListAi.Tests.csproj" />
+</Solution>

@@ -1,7 +1,7 @@
 services:
   backend:
     build:
-      context: ./Server
+      context: ./src/Server
       dockerfile: Dockerfile
       args:
         - API_PORT=${API_PORT}
@@ -10,15 +10,12 @@ services:
       - "${API_PORT}:${API_PORT}"
     environment:
       - API_PORT=${API_PORT}
-      - PYTHONUNBUFFERED=1
       - LLM=${LLM}
       - MODEL=${MODEL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - DATABASE_URL=${DATABASE_URL}
-      - SERVICE_NAME=${SERVICE_NAME}
-      - SERVICE_DESCRIPTION=${SERVICE_DESCRIPTION}
-    volumes:
-      - backend-logs:/app/logs
+      - DATABASE_PROVIDER=${DATABASE_PROVIDER}
+      - CONNECTION_STRING=${CONNECTION_STRING}
+      - CORS_ORIGINS=${CORS_ORIGINS}
     networks:
       - grocerylist-network
     healthcheck:
@@ -31,7 +28,7 @@ services:
 
   frontend:
     build:
-      context: ./Web
+      context: ./src/Web
       dockerfile: Dockerfile
       args:
         - VITE_API_URL=${VITE_API_URL}
@@ -48,7 +45,3 @@ services:
 networks:
   grocerylist-network:
     driver: bridge
-
-volumes:
-  backend-logs:
-    driver: local

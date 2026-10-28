@@ -18,8 +18,8 @@ echo "========================================"
 echo ""
 
 # Check if we're in the right directory
-if [ ! -f "Web/package.json" ]; then
-    echo -e "${RED}Error: package.json not found in Web directory${NC}"
+if [ ! -f "src/Web/package.json" ]; then
+    echo -e "${RED}Error: package.json not found in src/Web directory${NC}"
     echo "Please run this script from the project root directory"
     exit 1
 fi
@@ -33,11 +33,11 @@ echo ""
 
 # Step 1: Install dependencies
 echo -e "${YELLOW}[1/4] Installing npm dependencies...${NC}"
-cd Web
+cd src/Web
 npm install
 if [ $? -ne 0 ]; then
     echo -e "${RED}Error: npm install failed${NC}"
-    cd ..
+    cd ../..
     exit 1
 fi
 echo -e "${GREEN}[1/4] npm dependencies installed successfully${NC}"
@@ -48,14 +48,14 @@ echo -e "${YELLOW}[2/4] Building the web application...${NC}"
 npm run build
 if [ $? -ne 0 ]; then
     echo -e "${RED}Error: npm build failed${NC}"
-    cd ..
+    cd ../..
     exit 1
 fi
 echo -e "${GREEN}[2/4] Web application built successfully${NC}"
 echo ""
 
 # Step 3: Return to project root
-cd ..
+cd ../..
 
 # Step 4: Build Docker container
 echo -e "${YELLOW}[3/4] Building Docker frontend container...${NC}"

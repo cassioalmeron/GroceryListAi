@@ -12,8 +12,8 @@ echo ========================================
 echo.
 
 REM Check if we're in the right directory
-if not exist "Web\package.json" (
-    echo Error: package.json not found in Web directory
+if not exist "src\Web\package.json" (
+    echo Error: package.json not found in src\Web directory
     echo Please run this script from the project root directory
     exit /b 1
 )
@@ -27,11 +27,11 @@ echo.
 
 REM Step 1: Install dependencies
 echo [1/4] Installing npm dependencies...
-cd Web
+cd src\Web
 call npm install
 if !errorlevel! neq 0 (
     echo Error: npm install failed
-    cd ..
+    cd ..\..
     exit /b 1
 )
 echo [1/4] npm dependencies installed successfully
@@ -42,14 +42,14 @@ echo [2/4] Building the web application...
 call npm run build
 if !errorlevel! neq 0 (
     echo Error: npm build failed
-    cd ..
+    cd ..\..
     exit /b 1
 )
 echo [2/4] Web application built successfully
 echo.
 
 REM Step 3: Return to project root
-cd ..
+cd ..\..
 
 REM Step 4: Build Docker container
 echo [3/4] Building Docker frontend container...

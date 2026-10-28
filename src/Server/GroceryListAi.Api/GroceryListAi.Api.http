@@ -1,0 +1,6 @@
+@GroceryListAi.Api_HostAddress = http://localhost:5071
+
+GET {{GroceryListAi.Api_HostAddress}}/api/items
+Accept: application/json
+
+###

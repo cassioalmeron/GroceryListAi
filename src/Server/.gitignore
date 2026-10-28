@@ -1,0 +1,12 @@
+# Build artifacts
+bin/
+obj/
+
+# Rider / Visual Studio
+.vs/
+.idea/
+*.user
+*.suo
+
+# Environment variables
+.env
