@@ -1,5 +1,7 @@
 # Plan: Migrate Backend from SQLite to PostgreSQL
 
+**Status:** Implemented (28/10/2026) — production runs on Postgres
+
 ## Context
 
 The GroceryListAi backend currently uses SQLite for local development convenience. Moving to PostgreSQL prepares the project for production use with better concurrency, data integrity, and cloud hosting compatibility. No data migration is needed — the database will start fresh.

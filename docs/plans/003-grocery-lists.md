@@ -1,7 +1,7 @@
 # Plan: Multiple grocery lists
 
 **Date:** 28/10/2026
-**Status:** In Progress
+**Status:** Implemented (29/10/2026)
 
 ## Objective
 
@@ -360,7 +360,7 @@ and a voice "add milk" adds it only to the list shown.
   - Migration snapshot and Designer hand-written (SQLite style), because `dotnet ef` picked up the machine's Postgres settings file.
   - `AlterColumn` on `Item.ListId` has no default value (removed `defaultValue: 0`, per Decision 8).
   - Post-deploy fix: on Postgres the `General` `InsertData` crashed (`InvalidCastException`, DateTime → String) because it took its column types from the SQLite-style Designer. `InsertData` now passes `columnTypes` from a new `IMigrationProviderTypes.String(maxLength)` plus `DateTime` (decided with the user: no plain SQL). Regression test `MigrationTests_Every_migration_generates_a_postgres_script_that_seeds_the_general_list` generates the full Postgres script without a server.
-- Pending: back up the live database and check the "General" item count after deploying; a real LLM chat call.
+- Pending: none — deployed to production (Postgres) on 29/10/2026, confirmed working by the user.
 
 ### Phase 2 — Grocery list API — Done (28/10/2026)
 - Done by: Flowing-csharpBackendDeveloper
@@ -374,7 +374,7 @@ and a voice "add milk" adds it only to the list shown.
 - Acceptance: `npm run build` passed; `npm run lint` → the same 4 pre-existing problems (ThemeContext, Tests page, VoiceButton), none new. Browser checks → manual.
 - Compliance review: 1 iteration — 0 findings.
 - Deviations: `TodoList` ignores a slow response for a list the user already switched away from (the agent reported this but had not implemented it — it had silenced `exhaustive-deps` with an `eslint-disable` comment instead; a later `/Flowing-CodeReviewer` caught it and it was fixed: `loadTodos` in `useCallback([listId])`, effect cleanup flag); `ListSelector` is presentational (API calls and toasts live in `Home`); selected id stored under the `localStorage` key `selected_list_id`.
-- Pending (manual): after deploy the dropdown shows "General" with the old items; a new list starts empty; duplicate name and deleting the last list show error toasts; a voice "add milk" lands only on the list shown.
+- Pending: none — running in production since 29/10/2026, confirmed working by the user.
 
 ### Phase 5 — Docs — Done (28/10/2026)
 - Done by: orchestrator
